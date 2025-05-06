@@ -1,0 +1,42 @@
+{
+  "name": "@eriveltonsilva/currency.js",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [
+    "currency",
+    "currency.js",
+    "currency-js",
+    "money",
+    "money.js",
+    "money-js"
+  ],
+  "author": "Erivelton Silva <eriveltonsilva13@gmail.com>",
+  "homepage": "https://github.com/eriveltonsilva/currency.js#readme",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "./dist"
+  ],
+  "prettier": "@eriveltonsilva/prettier-config",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsx ./src/index.ts",
+    "fmt": "prettier --write .",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@eriveltonsilva/prettier-config": "^1.0.1",
+    "@tsconfig/node-ts": "^23.6.1",
+    "@tsconfig/node22": "^22.0.1",
+    "@tsconfig/strictest": "^2.0.5",
+    "@types/node": "^22.15.11",
+    "prettier": "^3.5.3",
+    "tsconfig-paths": "^4.2.0",
+    "tsup": "^8.4.0",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.3"
+  }
+}
