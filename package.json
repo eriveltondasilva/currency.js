@@ -1,7 +1,7 @@
 {
   "name": "@eriveltonsilva/currency.js",
   "version": "0.0.1",
-  "description": "",
+  "description": "A JavaScript library for currency operations",
   "keywords": [
     "currency",
     "currency.js",
@@ -16,6 +16,13 @@
     "node": ">=22"
   },
   "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs"
+    }
+  },
   "types": "./dist/index.d.ts",
   "author": "Erivelton Silva <eriveltondasilva13@gmail.com>",
   "homepage": "https://github.com/eriveltondasilva/currency.js#readme",
