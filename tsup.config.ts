@@ -1,12 +1,5 @@
-import { defineConfig, type Format } from 'tsup'
+import { defineConfig } from 'tsup'
 import packageJson from './package.json'
-
-const shouldMinify = process.env.NODE_ENV === 'production'
-
-const extensions: Record<'esm' | 'cjs', string> = {
-  esm: shouldMinify ? '.min.mjs' : '.mjs',
-  cjs: shouldMinify ? '.min.cjs' : '.cjs',
-}
 
 const banner = `
 /**
@@ -20,13 +13,13 @@ const banner = `
 
 export default defineConfig({
   entry: ['./src/index.ts'],
-  format: Object.keys(extensions) as Format[],
-  minify: shouldMinify,
+  format: ['esm', 'cjs'],
   clean: true,
   dts: true,
+  sourcemap: true,
   treeshake: true,
   outExtension: ({ format }) => ({
-    js: extensions[format],
+    js: format === 'esm' ? '.mjs' : '.cjs',
   }),
   banner: {
     js: banner,
