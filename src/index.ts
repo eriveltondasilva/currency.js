@@ -10,4 +10,4 @@
 import { Currency } from './lib/currency.ts'
 
 const currency = new Currency(10)
-console.log(currency.add(0.55).getValue())
+console.log(currency.add(0.55).getValue()) // 10.55
