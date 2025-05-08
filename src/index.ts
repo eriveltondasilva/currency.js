@@ -1,5 +1,5 @@
 /**
- * Biblioteca aprimorada para manipulação de valores monetários,
+ * Biblioteca especializada para manipulação de valores monetários,
  * evitando problemas de arredondamento com números de ponto flutuante e
  * oferecendo uma API rica para operações financeiras.
  *
@@ -7,7 +7,90 @@
  * @version 0.0.1
  */
 
+import { ROUNDING_MODES } from './config/enums.ts'
+import { Calculator } from './lib/calculator.ts'
 import { Currency } from './lib/currency.ts'
 
-const currency = new Currency(10)
-console.log(currency.add(0.55).getValue())
+//# Demonstração das funcionalidades da biblioteca
+
+//* Obtenção de valores monetários em diferentes formatos
+const price = new Currency(10.99)
+
+console.log('Valor numérico:', price.getValue()) // 10.99 (número)
+console.log('Valor em centavos:', price.getCents()) // 1099 (centavos)
+console.log('Valor como string:', price.toString()) // "10.99" (string)
+console.log('Valor primitivo:', price.valueOf()) // "10.99" (string)
+console.log()
+
+//* Criação de instâncias monetárias a partir de diferentes fontes
+const price1 = new Currency(150.75)
+const price2 = new Currency('1.599,99')
+const price3 = new Currency(price1) // Cria a partir de outra instância Currency
+
+console.log('Valor 1:', price1.format()) // R$ 150,75
+console.log('Valor 2:', price2.format()) // R$ 1.599,99
+console.log('Valor 3:', price3.format()) // R$ 150,75
+console.log()
+
+//* Operações aritméticas com valores monetários
+const sum = price1.add(price2)
+const difference = price2.subtract(price1)
+const doubled = price1.multiply(2)
+const half = price1.divide(2)
+
+console.log('Soma:', sum.format()) // R$ 1.750,74
+console.log('Diferença:', difference.format()) // R$ 1.449,24
+console.log('Dobro:', doubled.format()) // R$ 301,50
+console.log('Metade:', half.format()) // R$ 75,38
+console.log()
+
+//* Comparações entre valores monetários
+console.log('price1 > price2:', price1.greaterThan(price2)) // false
+console.log('price1 < price2:', price1.lessThan(price2)) // true
+console.log('price1 = price1:', price1.equals(price1)) // true
+console.log()
+
+//* Opções de formatação para diferentes moedas e estilos
+console.log('BRL:', price1.format({ currencyCode: 'BRL' })) // R$ 150,75
+console.log('USD:', price1.format({ currencyCode: 'USD' })) // $ 150.75
+console.log('Sem símbolo monetário:', price1.format({ showSymbol: false })) // 150,75
+console.log()
+
+//* Cálculos com coleções de itens comerciais
+const items = [
+  { name: 'Produto 1', price: 99.99, quantity: 2 },
+  { name: 'Produto 2', price: 149.9, quantity: 1 },
+  { name: 'Produto 3', price: 299.99, quantity: 3 },
+]
+
+const total = Calculator.calculateTotal(items)
+const average = Calculator.calculateAveragePrice(items)
+
+console.log('Total da compra:', total.format()) // R$ 1.249,85
+console.log('Preço médio:', average.format()) // R$ 183,29
+console.log()
+
+//* Estratégias de arredondamento para valores monetários
+const value = new Currency(123.45)
+console.log('Valor original:', value.format()) // R$ 123,45
+console.log('Arredondado para múltiplo de 10:', value.round(10).format()) // R$ 120,00
+console.log(
+  'Arredondado para cima (múltiplo de 10):',
+  value.round(10, ROUNDING_MODES.CEIL).format(),
+) // R$ 130,00
+console.log(
+  'Arredondado para baixo (múltiplo de 10):',
+  value.round(10, ROUNDING_MODES.FLOOR).format(),
+) // R$ 120,00
+console.log()
+
+//* Cálculo e distribuição de parcelas
+const totalValue = new Currency(100)
+const installments = Calculator.distributeInstallments(totalValue, 3)
+
+installments.forEach((inst, index) => {
+  console.log(`Parcela ${index + 1}: ${inst.format()}`)
+})
+// Parcela 1: R$ 33,34
+// Parcela 2: R$ 33,33
+// Parcela 3: R$ 33,33
