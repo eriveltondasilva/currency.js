@@ -9,6 +9,10 @@ import type { CurrencyInput, FormatOptions } from '../types.ts'
  */
 export class Formatter {
   static format(value: CurrencyInput, options: FormatOptions = {}): string {
+    if (value === null || value === undefined) {
+      throw new Error('O valor não pode ser nulo ou indefinido')
+    }
+
     const numValue =
       isObject(value) && 'getValue' in value ? value.getValue() : Number(value)
 

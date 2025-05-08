@@ -1,5 +1,5 @@
 import { CURRENCY_LOCALES } from '@/config/enums.js'
-import { isObject } from '../utils/is.ts'
+import { isNill, isObject } from '../utils/is.ts'
 
 import type { CurrencyCode, CurrencyInput } from '../types.ts'
 
@@ -10,8 +10,8 @@ export class Converter {
   private static readonly CENT_FACTOR = 100
 
   public static toCents(value: CurrencyInput): number {
-    if (value == null) {
-      throw new Error('Value is required')
+    if (isNill(value)) {
+      throw new Error('O valor não pode ser nulo ou indefinido')
     }
 
     if (isObject(value) && 'getCents' in value) {
@@ -44,12 +44,17 @@ export class Converter {
       value.indexOf(',') > value.indexOf('.') ||
       (value.indexOf('.') === -1 && value.indexOf(',') !== -1)
 
-    return hasBrazilianFormat ?
-        value.replace(/\./g, '').replace(',', '.')
-      : value.replace(/,/g, '')
+    if (hasBrazilianFormat) {
+      return value.replace(/\./g, '').replace(',', '.')
+    }
+
+    return value.replace(/,/g, '')
   }
 
   private static numberToCents(value: number): number {
+    if (isNaN(value)) {
+      throw new Error('O valor deve ser um número válido')
+    }
     return Math.round(value * Converter.CENT_FACTOR)
   }
 }

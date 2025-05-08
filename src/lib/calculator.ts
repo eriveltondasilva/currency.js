@@ -1,9 +1,8 @@
-import { ROUNDING_MODES } from '../config/enums.ts'
 import { isEmpty } from '../utils/is.ts'
 import { Converter } from './converter.ts'
 import { Currency } from './currency.ts'
 
-import type { CurrencyInput, PricedItem, RoundingModes } from '../types.ts'
+import type { CurrencyInput, PricedItem } from '../types.ts'
 
 /**
  * Classe responsável por operações matemáticas com valores monetários
@@ -21,8 +20,7 @@ export class Calculator {
     }
 
     const total = validItems.reduce((sum: number, item: PricedItem) => {
-      const price = item.price || 0
-      return sum + Converter.toCents(price)
+      return sum + Converter.toCents(item.price || 0)
     }, 0)
 
     return Currency.fromCents(Math.round(total / validItems.length))
@@ -66,14 +64,9 @@ export class Calculator {
     const baseCents = Math.floor(total.getCents() / numberOfInstallments)
     const remainder = total.getCents() % numberOfInstallments
 
-    const installments: Currency[] = []
-
-    for (let i = 0; i < numberOfInstallments; i++) {
-      // Distribui o restante nos primeiros elementos para evitar diferenças de arredondamento
+    return Array.from({ length: numberOfInstallments }, (_, i) => {
       const cents = baseCents + (i < remainder ? 1 : 0)
-      installments.push(Currency.fromCents(cents))
-    }
-
-    return installments
+      return Currency.fromCents(cents)
+    })
   }
 }

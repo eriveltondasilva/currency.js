@@ -108,7 +108,13 @@ export class Currency {
   }
 
   divide(divisor: number): Currency {
-    if (divisor === 0) throw new Error('Não é possível dividir por zero.')
+    if (divisor === 0) {
+      throw new Error('Não é possível dividir por zero.')
+    }
+
+    if (Number.isNaN(divisor)) {
+      throw new Error('O divisor não pode ser NaN.')
+    }
 
     return Currency.fromCents(Math.round(this.cents / divisor))
   }
@@ -119,14 +125,23 @@ export class Currency {
 
   //# Percentuais e Descontos
   percentage(percentage: number): Currency {
+    if (isNaN(percentage)) {
+      throw new Error('A porcentagem não pode ser NaN.')
+    }
     return this.multiply(percentage / 100)
   }
 
   applyDiscount(discountPercentage: number): Currency {
+    if (discountPercentage < 0) {
+      throw new Error('O percentual de desconto não pode ser negativo.')
+    }
     return this.subtract(this.percentage(discountPercentage))
   }
 
   applySurcharge(surchargePercentage: number): Currency {
+    if (surchargePercentage < 0) {
+      throw new Error('O percentual de acréscimo não pode ser negativo.')
+    }
     return this.add(this.percentage(surchargePercentage))
   }
 
