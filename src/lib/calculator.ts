@@ -1,22 +1,23 @@
 import { ROUNDING_MODES } from '../config/enums.ts'
+import { isEmpty } from '../utils/is.ts'
 import { Converter } from './converter.ts'
 import { Currency } from './currency.ts'
 
-import type { CurrencyInput, PricedItem } from '../types.ts'
+import type { CurrencyInput, PricedItem, RoundingModes } from '../types.ts'
 
 /**
  * Classe responsável por operações matemáticas com valores monetários
  */
 export class Calculator {
-  static calculateAveragePrice(items: Array<PricedItem> | null): Currency {
-    if (!items || items.length === 0) {
-      return new Currency(0)
+  static calculateAveragePrice(items: PricedItem[] | null): Currency {
+    if (!items || isEmpty(items)) {
+      return Currency.zero()
     }
 
     const validItems = items.filter((item) => item.price !== undefined)
 
-    if (validItems.length === 0) {
-      return new Currency(0)
+    if (isEmpty(validItems)) {
+      return Currency.zero()
     }
 
     const total = validItems.reduce((sum: number, item: PricedItem) => {
@@ -24,60 +25,39 @@ export class Calculator {
       return sum + Converter.toCents(price)
     }, 0)
 
-    return new Currency(total / (100 * validItems.length))
+    return Currency.fromCents(Math.round(total / validItems.length))
   }
 
   static calculateSubtotal(
     unitPrice: CurrencyInput,
     quantity: number,
   ): Currency {
+    if (quantity < 0) throw new Error('A quantidade não pode ser negativa.')
+
     const price = new Currency(unitPrice)
     return price.multiply(quantity)
   }
 
-  static calculateTotal(items: Array<PricedItem> | null): Currency {
-    if (!items || items.length === 0) {
-      return new Currency(0)
+  static calculateTotal(items: PricedItem[] | null): Currency {
+    if (!items || isEmpty(items)) {
+      return Currency.zero()
     }
 
     return items.reduce((total, item) => {
       if (!item.price) return total
+
       const quantity = item.quantity || 1
-      const itemTotal = Calculator.calculateSubtotal(item.price, quantity)
+      const itemPrice = new Currency(item.price)
+      const itemTotal = itemPrice.multiply(quantity)
+
       return total.add(itemTotal)
-    }, new Currency(0))
-  }
-
-  static calculatePercentage(
-    baseValue: CurrencyInput,
-    percentage: number,
-  ): Currency {
-    const base = new Currency(baseValue)
-    return base.multiply(percentage / 100)
-  }
-
-  static applyDiscount(
-    baseValue: CurrencyInput,
-    discountPercentage: number,
-  ): Currency {
-    const base = new Currency(baseValue)
-    const discount = Calculator.calculatePercentage(base, discountPercentage)
-    return base.subtract(discount)
-  }
-
-  static applySurcharge(
-    baseValue: CurrencyInput,
-    surchargePercentage: number,
-  ): Currency {
-    const base = new Currency(baseValue)
-    const surcharge = Calculator.calculatePercentage(base, surchargePercentage)
-    return base.add(surcharge)
+    }, Currency.zero())
   }
 
   static distributeInstallments(
     totalValue: CurrencyInput,
     numberOfInstallments: number,
-  ): Array<Currency> {
+  ): Currency[] {
     if (numberOfInstallments <= 0) {
       throw new Error('O número de parcelas deve ser maior que zero.')
     }
@@ -86,41 +66,14 @@ export class Calculator {
     const baseCents = Math.floor(total.getCents() / numberOfInstallments)
     const remainder = total.getCents() % numberOfInstallments
 
-    const installments: Array<Currency> = []
+    const installments: Currency[] = []
 
     for (let i = 0; i < numberOfInstallments; i++) {
+      // Distribui o restante nos primeiros elementos para evitar diferenças de arredondamento
       const cents = baseCents + (i < remainder ? 1 : 0)
-      installments.push(new Currency(cents / 100))
+      installments.push(Currency.fromCents(cents))
     }
 
     return installments
-  }
-
-  static round(
-    value: CurrencyInput,
-    precision: number = 1,
-    mode: ROUNDING_MODES = ROUNDING_MODES.ROUND,
-  ): Currency {
-    if (precision <= 0) {
-      throw new Error('A precisão deve ser maior que zero.')
-    }
-
-    const cents = Converter.toCents(value)
-    let roundedCents: number
-
-    switch (mode) {
-      case ROUNDING_MODES.FLOOR:
-        roundedCents = Math.floor(cents / precision) * precision
-        break
-      case ROUNDING_MODES.CEIL:
-        roundedCents = Math.ceil(cents / precision) * precision
-        break
-      case ROUNDING_MODES.ROUND:
-      default:
-        roundedCents = Math.round(cents / precision) * precision
-        break
-    }
-
-    return new Currency(roundedCents / 100)
   }
 }

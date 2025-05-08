@@ -1,5 +1,6 @@
+import { FORMAT_STYLE } from '../config/enums.ts'
+import { isObject } from '../utils/is.ts'
 import { Converter } from './converter.ts'
-import { Currency } from './currency.ts'
 
 import type { CurrencyInput, FormatOptions } from '../types.ts'
 
@@ -9,17 +10,18 @@ import type { CurrencyInput, FormatOptions } from '../types.ts'
 export class Formatter {
   static format(value: CurrencyInput, options: FormatOptions = {}): string {
     const numValue =
-      value instanceof Currency ? value.getValue() : Number(value)
+      isObject(value) && 'getValue' in value ? value.getValue() : Number(value)
+
     const {
       currencyCode = 'BRL',
-      locale = Converter.getLocaleForCurrency(currencyCode),
+      locale = Converter.getLocale(currencyCode),
       showSymbol = true,
       minimumFractionDigits = 2,
       maximumFractionDigits = 2,
     } = options
 
     return new Intl.NumberFormat(locale, {
-      style: showSymbol ? 'currency' : 'decimal',
+      style: showSymbol ? FORMAT_STYLE.CURRENCY : FORMAT_STYLE.DECIMAL,
       currency: currencyCode,
       minimumFractionDigits,
       maximumFractionDigits,

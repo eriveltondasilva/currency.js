@@ -1,5 +1,5 @@
 import { CURRENCY_LOCALES } from '@/config/enums.js'
-import { Currency } from './currency.ts'
+import { isObject } from '../utils/is.ts'
 
 import type { CurrencyCode, CurrencyInput } from '../types.ts'
 
@@ -7,8 +7,14 @@ import type { CurrencyCode, CurrencyInput } from '../types.ts'
  * Classe responsável pela conversão de diferentes tipos de entrada para centavos
  */
 export class Converter {
-  static toCents(value: CurrencyInput): number {
-    if (value instanceof Currency) {
+  private static readonly CENT_FACTOR = 100
+
+  public static toCents(value: CurrencyInput): number {
+    if (value == null) {
+      throw new Error('Value is required')
+    }
+
+    if (isObject(value) && 'getCents' in value) {
       return value.getCents()
     }
 
@@ -16,16 +22,21 @@ export class Converter {
       return Converter.stringToCents(value)
     }
 
-    return Math.round(Number(value) * 100)
+    return Converter.numberToCents(Number(value))
   }
 
+  public static getLocale(currencyCode: CurrencyCode): string {
+    return CURRENCY_LOCALES[currencyCode] || CURRENCY_LOCALES.USD
+  }
+
+  //#
   private static stringToCents(value: string): number {
     const cleanValue = value.replace(/[^\d.,+-]/g, '')
 
     if (!cleanValue) return 0
 
-    const normalizedValue = this.normalizeDecimalFormat(cleanValue)
-    return Math.round(parseFloat(normalizedValue) * 100)
+    const normalizedValue = Converter.normalizeDecimalFormat(cleanValue)
+    return Math.round(parseFloat(normalizedValue) * Converter.CENT_FACTOR)
   }
 
   private static normalizeDecimalFormat(value: string): string {
@@ -38,7 +49,7 @@ export class Converter {
       : value.replace(/,/g, '')
   }
 
-  static getLocaleForCurrency(currencyCode: CurrencyCode): string {
-    return CURRENCY_LOCALES[currencyCode] || CURRENCY_LOCALES.DEFAULT
+  private static numberToCents(value: number): number {
+    return Math.round(value * Converter.CENT_FACTOR)
   }
 }

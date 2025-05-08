@@ -1,10 +1,8 @@
 import { ROUNDING_MODES } from '../config/enums.ts'
-import { Calculator } from './calculator.ts'
-import { Comparator } from './comparator.ts'
 import { Converter } from './converter.ts'
 import { Formatter } from './formatter.ts'
 
-import type { CurrencyInput, FormatOptions } from '../types.ts'
+import type { CurrencyInput, FormatOptions, RoundingModes } from '../types.ts'
 
 /**
  * Representa um valor monetário com precisão de 2 casas decimais
@@ -13,20 +11,25 @@ export class Currency {
   private readonly cents: number
 
   constructor(value: CurrencyInput = 0) {
-    // Converte o valor para centavos e armazena como inteiro
     this.cents = Converter.toCents(value)
   }
 
+  //#
   static fromCents(cents: number): Currency {
     const currency = new Currency(0)
     Object.defineProperty(currency, 'cents', { value: Math.round(cents) })
     return currency
   }
 
+  static fromValue(value: CurrencyInput): Currency {
+    return new Currency(value)
+  }
+
   static zero(): Currency {
     return new Currency(0)
   }
 
+  //# Obtenção de Valores
   getCents(): number {
     return this.cents
   }
@@ -35,6 +38,15 @@ export class Currency {
     return this.cents / 100
   }
 
+  toString(): string {
+    return this.getValue().toFixed(2)
+  }
+
+  valueOf(): number {
+    return this.getValue()
+  }
+
+  //# Verificações de Estado
   isZero(): boolean {
     return this.cents === 0
   }
@@ -47,6 +59,38 @@ export class Currency {
     return this.cents < 0
   }
 
+  //# Comparação
+  equals(value: CurrencyInput): boolean {
+    return this.cents === Converter.toCents(value)
+  }
+
+  greaterThan(value: CurrencyInput): boolean {
+    return this.cents > Converter.toCents(value)
+  }
+
+  lessThan(value: CurrencyInput): boolean {
+    return this.cents < Converter.toCents(value)
+  }
+
+  greaterThanOrEqual(value: CurrencyInput): boolean {
+    return this.cents >= Converter.toCents(value)
+  }
+
+  lessThanOrEqual(value: CurrencyInput): boolean {
+    return this.cents <= Converter.toCents(value)
+  }
+
+  max(value: CurrencyInput): Currency {
+    const otherCents = Converter.toCents(value)
+    return Currency.fromCents(Math.max(this.cents, otherCents))
+  }
+
+  min(value: CurrencyInput): Currency {
+    const otherCents = Converter.toCents(value)
+    return Currency.fromCents(Math.min(this.cents, otherCents))
+  }
+
+  //# Operações Básicas
   abs(): Currency {
     return Currency.fromCents(Math.abs(this.cents))
   }
@@ -64,9 +108,8 @@ export class Currency {
   }
 
   divide(divisor: number): Currency {
-    if (divisor === 0) {
-      throw new Error('Não é possível dividir por zero.')
-    }
+    if (divisor === 0) throw new Error('Não é possível dividir por zero.')
+
     return Currency.fromCents(Math.round(this.cents / divisor))
   }
 
@@ -74,6 +117,7 @@ export class Currency {
     return Currency.fromCents(-this.cents)
   }
 
+  //# Percentuais e Descontos
   percentage(percentage: number): Currency {
     return this.multiply(percentage / 100)
   }
@@ -86,50 +130,35 @@ export class Currency {
     return this.add(this.percentage(surchargePercentage))
   }
 
+  //# Arredondamento
   round(
     precision: number = 1,
-    mode: ROUNDING_MODES = ROUNDING_MODES.ROUND,
+    mode: RoundingModes = ROUNDING_MODES.ROUND,
   ): Currency {
-    return Calculator.round(this, precision, mode)
+    if (precision <= 0) {
+      throw new Error('A precisão deve ser maior que zero.')
+    }
+
+    let roundedCents: number
+
+    switch (mode) {
+      case ROUNDING_MODES.FLOOR:
+        roundedCents = Math.floor(this.cents / precision) * precision
+        break
+      case ROUNDING_MODES.CEIL:
+        roundedCents = Math.ceil(this.cents / precision) * precision
+        break
+      case ROUNDING_MODES.ROUND:
+      default:
+        roundedCents = Math.round(this.cents / precision) * precision
+        break
+    }
+
+    return Currency.fromCents(roundedCents)
   }
 
+  //# Formatação
   format(options: FormatOptions = {}): string {
     return Formatter.format(this, options)
-  }
-
-  equals(value: CurrencyInput): boolean {
-    return Comparator.equals(this, value)
-  }
-
-  greaterThan(value: CurrencyInput): boolean {
-    return Comparator.greaterThan(this, value)
-  }
-
-  lessThan(value: CurrencyInput): boolean {
-    return Comparator.lessThan(this, value)
-  }
-
-  greaterThanOrEqual(value: CurrencyInput): boolean {
-    return Comparator.greaterThanOrEqual(this, value)
-  }
-
-  lessThanOrEqual(value: CurrencyInput): boolean {
-    return Comparator.lessThanOrEqual(this, value)
-  }
-
-  max(value: CurrencyInput): Currency {
-    return Comparator.max(this, value)
-  }
-
-  min(value: CurrencyInput): Currency {
-    return Comparator.min(this, value)
-  }
-
-  toString(): string {
-    return this.getValue().toFixed(2)
-  }
-
-  valueOf(): number {
-    return this.getValue()
   }
 }
