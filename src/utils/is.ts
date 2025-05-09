@@ -33,13 +33,3 @@ export function isEmpty(value: unknown): boolean {
 
   return false
 }
-
-// isEmpty(null);               // true
-// isEmpty("");                 // true
-// isEmpty([]);                 // true
-// isEmpty({});                 // true
-// isEmpty(new Map());          // true
-// isEmpty(new Set());          // true
-// isEmpty("teste");            // false
-// isEmpty([1, 2]);             // false
-// isEmpty({ nome: "João" });   // false
