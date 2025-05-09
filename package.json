@@ -19,11 +19,9 @@
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.cjs"
     }
   },
-  "types": "./dist/index.d.ts",
   "author": "Erivelton Silva <eriveltondasilva13@gmail.com>",
   "homepage": "https://github.com/eriveltondasilva/currency.js#readme",
   "bugs": "https://github.com/eriveltondasilva/currency.js/issues",
@@ -39,7 +37,7 @@
     "clean": "rm -rf ./dist",
     "fmt": "prettier --write ./",
     "check:types": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run "
   },
   "devDependencies": {
     "@eriveltonsilva/prettier-config": "^1.0.1",
