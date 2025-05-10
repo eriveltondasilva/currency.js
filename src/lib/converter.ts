@@ -1,16 +1,16 @@
-import { CURRENCY_LOCALES } from '@/config/enums.js'
-import { isNill, isObject } from '../utils/is.ts'
+import { CENT_FACTOR } from '../config/constants.ts'
+import { isNil, isObject, isString } from '../utils/is.ts'
+import { singleton } from '../utils/singleton.ts'
 
-import type { CurrencyCode, CurrencyInput } from '../types.ts'
+import type { CurrencyInput } from '../types.ts'
 
 /**
  * Classe responsável pela conversão de diferentes tipos de entrada para centavos
  */
+@singleton
 export class Converter {
-  private static readonly CENT_FACTOR = 100
-
-  public static toCents(value: CurrencyInput): number {
-    if (isNill(value)) {
+  public toCents(value: CurrencyInput): number {
+    if (isNil(value)) {
       throw new Error('O valor não pode ser nulo ou indefinido')
     }
 
@@ -18,28 +18,24 @@ export class Converter {
       return value.getCents()
     }
 
-    if (typeof value === 'string') {
-      return Converter.stringToCents(value)
+    if (isString(value)) {
+      return this.stringToCents(value)
     }
 
-    return Converter.numberToCents(Number(value))
-  }
-
-  public static getLocale(currencyCode: CurrencyCode): string {
-    return CURRENCY_LOCALES[currencyCode] || CURRENCY_LOCALES.USD
+    return this.numberToCents(Number(value))
   }
 
   //#
-  private static stringToCents(value: string): number {
+  private stringToCents(value: string): number {
     const cleanValue = value.replace(/[^\d.,+-]/g, '')
 
     if (!cleanValue) return 0
 
-    const normalizedValue = Converter.normalizeDecimalFormat(cleanValue)
-    return Math.round(parseFloat(normalizedValue) * Converter.CENT_FACTOR)
+    const normalizedValue = this.normalizeDecimalFormat(cleanValue)
+    return Math.round(parseFloat(normalizedValue) * CENT_FACTOR)
   }
 
-  private static normalizeDecimalFormat(value: string): string {
+  private normalizeDecimalFormat(value: string): string {
     const hasBrazilianFormat =
       value.indexOf(',') > value.indexOf('.') ||
       (value.indexOf('.') === -1 && value.indexOf(',') !== -1)
@@ -51,10 +47,10 @@ export class Converter {
     return value.replace(/,/g, '')
   }
 
-  private static numberToCents(value: number): number {
+  private numberToCents(value: number): number {
     if (isNaN(value)) {
       throw new Error('O valor deve ser um número válido')
     }
-    return Math.round(value * Converter.CENT_FACTOR)
+    return Math.round(value * CENT_FACTOR)
   }
 }

@@ -1,4 +1,4 @@
-import { ROUNDING_MODES } from '../config/enums.ts'
+import { ROUNDING_MODES } from '../config/constants.ts'
 import { Converter } from './converter.ts'
 import { Formatter } from './formatter.ts'
 
@@ -9,24 +9,24 @@ import type { CurrencyInput, FormatOptions, RoundingModes } from '../types.ts'
  */
 export class Currency {
   private readonly cents: number
+  private readonly converter: Converter
+  private readonly formatter: Formatter
 
-  constructor(value: CurrencyInput = 0) {
-    this.cents = Converter.toCents(value)
+  constructor(value: CurrencyInput = 0, converter: Converter, formatter: Formatter) {
+    this.converter = converter
+    this.formatter = formatter
+    this.cents = this.converter.toCents(value)
   }
 
-  //#
+  //# Construção de Instâncias
   static fromCents(cents: number): Currency {
-    const currency = new Currency(0)
+    const currency = new Currency(0, new Converter(), new Formatter())
     Object.defineProperty(currency, 'cents', { value: Math.round(cents) })
     return currency
   }
 
   static fromValue(value: CurrencyInput): Currency {
-    return new Currency(value)
-  }
-
-  static zero(): Currency {
-    return new Currency(0)
+    return new Currency(value, new Converter(), new Formatter())
   }
 
   //# Obtenção de Valores
@@ -61,32 +61,32 @@ export class Currency {
 
   //# Comparação
   equals(value: CurrencyInput): boolean {
-    return this.cents === Converter.toCents(value)
+    return this.cents === this.converter.toCents(value)
   }
 
   greaterThan(value: CurrencyInput): boolean {
-    return this.cents > Converter.toCents(value)
+    return this.cents > this.converter.toCents(value)
   }
 
   lessThan(value: CurrencyInput): boolean {
-    return this.cents < Converter.toCents(value)
+    return this.cents < this.converter.toCents(value)
   }
 
   greaterThanOrEqual(value: CurrencyInput): boolean {
-    return this.cents >= Converter.toCents(value)
+    return this.cents >= this.converter.toCents(value)
   }
 
   lessThanOrEqual(value: CurrencyInput): boolean {
-    return this.cents <= Converter.toCents(value)
+    return this.cents <= this.converter.toCents(value)
   }
 
   max(value: CurrencyInput): Currency {
-    const otherCents = Converter.toCents(value)
+    const otherCents = this.converter.toCents(value)
     return Currency.fromCents(Math.max(this.cents, otherCents))
   }
 
   min(value: CurrencyInput): Currency {
-    const otherCents = Converter.toCents(value)
+    const otherCents = this.converter.toCents(value)
     return Currency.fromCents(Math.min(this.cents, otherCents))
   }
 
@@ -96,11 +96,11 @@ export class Currency {
   }
 
   add(value: CurrencyInput): Currency {
-    return Currency.fromCents(this.cents + Converter.toCents(value))
+    return Currency.fromCents(this.cents + this.converter.toCents(value))
   }
 
   subtract(value: CurrencyInput): Currency {
-    return Currency.fromCents(this.cents - Converter.toCents(value))
+    return Currency.fromCents(this.cents - this.converter.toCents(value))
   }
 
   multiply(factor: number): Currency {
@@ -174,6 +174,6 @@ export class Currency {
 
   //# Formatação
   format(options: FormatOptions = {}): string {
-    return Formatter.format(this, options)
+    return this.formatter.format(this, options)
   }
 }

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { isObject, isArray, isNill, isEmpty } from './is'
+import { isObject, isArray, isNil, isEmpty } from './is'
 
 describe('isObject', () => {
   it('deve retornar true para objetos', () => {
@@ -36,16 +36,16 @@ describe('isArray', () => {
 
 describe('isNill', () => {
   it('deve retornar true para null e undefined', () => {
-    expect(isNill(null)).toBe(true)
-    expect(isNill(undefined)).toBe(true)
+    expect(isNil(null)).toBe(true)
+    expect(isNil(undefined)).toBe(true)
   })
 
   it('deve retornar false para valores não-nulos', () => {
-    expect(isNill({})).toBe(false)
-    expect(isNill([])).toBe(false)
-    expect(isNill('')).toBe(false)
-    expect(isNill(0)).toBe(false)
-    expect(isNill(false)).toBe(false)
+    expect(isNil({})).toBe(false)
+    expect(isNil([])).toBe(false)
+    expect(isNil('')).toBe(false)
+    expect(isNil(0)).toBe(false)
+    expect(isNil(false)).toBe(false)
   })
 })
 

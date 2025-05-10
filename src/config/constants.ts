@@ -12,7 +12,9 @@ export const CURRENCY_LOCALES = {
   JPY: 'ja-JP',
 } as const
 
-export const FORMAT_STYLE = {
+export const FORMAT_STYLES = {
   CURRENCY: 'currency',
   DECIMAL: 'decimal',
 } as const
+
+export const CENT_FACTOR = 100

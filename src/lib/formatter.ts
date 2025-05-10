@@ -1,15 +1,16 @@
-import { FORMAT_STYLE } from '../config/enums.ts'
-import { isObject } from '../utils/is.ts'
-import { Converter } from './converter.ts'
+import { CURRENCY_LOCALES, FORMAT_STYLES } from '../config/constants.ts'
+import { isNil, isObject } from '../utils/is.ts'
+import { singleton } from '../utils/singleton.ts'
 
 import type { CurrencyInput, FormatOptions } from '../types.ts'
 
 /**
  * Classe responsável pela formatação de valores monetários
  */
+@singleton
 export class Formatter {
-  static format(value: CurrencyInput, options: FormatOptions = {}): string {
-    if (value === null || value === undefined) {
+  public format(value: CurrencyInput, options: FormatOptions = {}): string {
+    if (isNil(value)) {
       throw new Error('O valor não pode ser nulo ou indefinido')
     }
 
@@ -18,14 +19,14 @@ export class Formatter {
 
     const {
       currencyCode = 'BRL',
-      locale = Converter.getLocale(currencyCode),
+      locale = CURRENCY_LOCALES[currencyCode],
       showSymbol = true,
       minimumFractionDigits = 2,
       maximumFractionDigits = 2,
     } = options
 
     return new Intl.NumberFormat(locale, {
-      style: showSymbol ? FORMAT_STYLE.CURRENCY : FORMAT_STYLE.DECIMAL,
+      style: showSymbol ? FORMAT_STYLES.CURRENCY : FORMAT_STYLES.DECIMAL,
       currency: currencyCode,
       minimumFractionDigits,
       maximumFractionDigits,

@@ -1,25 +1,29 @@
-export function isObject(value: unknown): value is object {
-  return typeof value === 'object' && value !== null && !Array.isArray(value)
-}
-
-export function isArray(value: unknown): value is unknown[] {
-  return Array.isArray(value)
-}
-
-export function isNill(value: unknown): value is null | undefined {
+export function isNil(value: unknown): value is null | undefined {
   return value === null || value === undefined
 }
 
+export function isString(value: unknown): value is string {
+  return typeof value === 'string'
+}
+
+export function isArray<T = unknown>(value: unknown): value is T[] {
+  return Array.isArray(value)
+}
+
+export function isObject(value: unknown): value is object {
+  return typeof value === 'object' && !isNil(value) && !isArray(value)
+}
+
 export function isEmpty(value: unknown): boolean {
-  if (value === null || value === undefined) {
+  if (isNil(value)) {
     return true
   }
 
-  if (typeof value === 'string') {
+  if (isString(value)) {
     return value.trim().length === 0
   }
 
-  if (Array.isArray(value)) {
+  if (isArray(value)) {
     return value.length === 0
   }
 
@@ -27,7 +31,7 @@ export function isEmpty(value: unknown): boolean {
     return value.size === 0
   }
 
-  if (typeof value === 'object') {
+  if (isObject(value)) {
     return Object.keys(value).length === 0
   }
 

@@ -1,4 +1,4 @@
-import type { CURRENCY_LOCALES, ROUNDING_MODES } from './config/enums.ts'
+import type { CURRENCY_LOCALES, ROUNDING_MODES } from './config/constants.ts'
 import type { Currency } from './lib/currency.js'
 
 export type CurrencyInput = number | string | Currency
