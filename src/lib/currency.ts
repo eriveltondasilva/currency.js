@@ -11,10 +11,17 @@ export class Currency {
   private readonly cents: number
   private readonly converter: Converter
   private readonly formatter: Formatter
+  private readonly formatOptions: FormatOptions
 
-  constructor(value: CurrencyInput = 0, converter: Converter, formatter: Formatter) {
+  constructor(
+    value: CurrencyInput = 0,
+    converter: Converter,
+    formatter: Formatter,
+    formatOptions?: FormatOptions,
+  ) {
     this.converter = converter
     this.formatter = formatter
+    this.formatOptions = formatOptions || {}
     this.cents = this.converter.toCents(value)
   }
 
@@ -174,6 +181,6 @@ export class Currency {
 
   //# Formatação
   format(options: FormatOptions = {}): string {
-    return this.formatter.format(this, options)
+    return this.formatter.format(this, options || this.formatOptions)
   }
 }
