@@ -1,14 +1,13 @@
-import { Converter } from './lib/converter.ts'
-import { Currency as CurrencyLib } from './lib/currency.ts'
-import { Formatter } from './lib/formatter.ts'
+import { Money } from './lib/money.ts'
 
 import type { CurrencyInput, FormatOptions } from './types.ts'
 
-export function Currency(
+function currency(
   value: CurrencyInput = 0,
   formatOptions: FormatOptions = {},
-): CurrencyLib {
-  return new CurrencyLib(value, new Converter(), new Formatter(), formatOptions)
+): Money {
+  return new Money(value, formatOptions)
 }
 
-export default Currency
+export { currency, Money }
+export default currency

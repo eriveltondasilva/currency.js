@@ -1,7 +1,7 @@
 import type { CURRENCY_LOCALES, ROUNDING_MODES } from './config/constants.ts'
-import type { Currency } from './lib/currency.js'
+import type { Money } from './lib/money.ts'
 
-export type CurrencyInput = number | string | Currency
+export type CurrencyInput = number | string | Money
 export type CurrencyCode = keyof typeof CURRENCY_LOCALES
 export type CurrencyLocales =
   (typeof CURRENCY_LOCALES)[keyof typeof CURRENCY_LOCALES]

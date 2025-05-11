@@ -1,21 +1,27 @@
 import { CURRENCY_LOCALES, FORMAT_STYLES } from '../config/constants.ts'
 import { isNil, isObject } from '../utils/is.ts'
-import { singleton } from '../utils/singleton.ts'
 
 import type { CurrencyInput, FormatOptions } from '../types.ts'
 
 /**
  * Classe responsável pela formatação de valores monetários
  */
-@singleton
 export class Formatter {
-  public format(value: CurrencyInput, options: FormatOptions = {}): string {
-    if (isNil(value)) {
-      throw new Error('O valor não pode ser nulo ou indefinido')
-    }
+  static #instance: Formatter | null = null
 
-    const numValue =
-      isObject(value) && 'getValue' in value ? value.getValue() : Number(value)
+  private constructor() {}
+  public static get instance(): Formatter {
+    if (!Formatter.#instance) {
+      Formatter.#instance = new Formatter()
+    }
+    return Formatter.#instance
+  }
+
+  //#
+  public format(value: CurrencyInput, options: FormatOptions = {}): string {
+    if (isNil(value)) throw new Error('O valor não pode ser nulo ou indefinido')
+
+    const extractedValue = this.extractNumericValue(value)
 
     const {
       currencyCode = 'BRL',
@@ -30,6 +36,12 @@ export class Formatter {
       currency: currencyCode,
       minimumFractionDigits,
       maximumFractionDigits,
-    }).format(numValue)
+    }).format(extractedValue)
+  }
+
+  //#
+  private extractNumericValue(value: CurrencyInput): number {
+    if (isObject(value) && 'getValue' in value) return value.value
+    return Number(value)
   }
 }
