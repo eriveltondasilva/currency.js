@@ -1,27 +1,24 @@
 import { CURRENCY_LOCALES, FORMAT_STYLES } from '../config/constants.ts'
 import { isNil, isObject } from '../utils/is.ts'
 
-import type { CurrencyInput, FormatOptions } from '../types.ts'
+import type { FormatOptions, IFormattingService, MoneyInput } from '../types.ts'
 
 /**
  * Classe responsável pela formatação de valores monetários
  */
-export class Formatter {
-  static #instance: Formatter | null = null
+export class FormattingService implements IFormattingService {
+  private static _instance: FormattingService
 
   private constructor() {}
-  public static get instance(): Formatter {
-    if (!Formatter.#instance) {
-      Formatter.#instance = new Formatter()
-    }
-    return Formatter.#instance
+  public static get instance(): FormattingService {
+    return (this._instance ??= new this())
   }
 
   //#
-  public format(value: CurrencyInput, options: FormatOptions = {}): string {
+  public format(value: MoneyInput, options: FormatOptions = {}): string {
     if (isNil(value)) throw new Error('O valor não pode ser nulo ou indefinido')
 
-    const extractedValue = this.extractNumericValue(value)
+    const extractedMoney = this.extractNumericValue(value)
 
     const {
       currencyCode = 'BRL',
@@ -36,12 +33,11 @@ export class Formatter {
       currency: currencyCode,
       minimumFractionDigits,
       maximumFractionDigits,
-    }).format(extractedValue)
+    }).format(extractedMoney)
   }
 
   //#
-  private extractNumericValue(value: CurrencyInput): number {
-    if (isObject(value) && 'getValue' in value) return value.value
-    return Number(value)
+  private extractNumericValue(money: MoneyInput): number {
+    return isObject(money) && 'value' in money ? money.value : Number(money)
   }
 }

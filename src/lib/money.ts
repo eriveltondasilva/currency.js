@@ -1,95 +1,100 @@
 import { CENT_FACTOR, ROUNDING_MODES } from '../config/constants.ts'
-import { Converter } from './converter.ts'
-import { Formatter } from './formatter.ts'
+import { CalculatorService } from './calculator-service.ts'
+import { ConversionService } from './converter-service.ts'
+import { FormattingService } from './formatting-service.ts'
 
-import type { CurrencyInput, FormatOptions, RoundingModes } from '../types.ts'
+import type {
+  FormatOptions,
+  MoneyInput,
+  FormatOptions as options,
+  RoundingModes,
+} from '../types.ts'
 
 /**
  * Representa um valor monetário com precisão de 2 casas decimais
  */
 export class Money {
   #cents: number
-  private readonly converter: Converter
-  private readonly formatter: Formatter
-  private readonly formatOptions: FormatOptions
+  private readonly calculator: CalculatorService
+  private readonly converter: ConversionService
+  private readonly formatter: FormattingService
+  private readonly formatOptions: options
 
-  constructor(value: CurrencyInput = 0, formatOptions: FormatOptions = {}) {
-    this.converter = Converter.instance
-    this.formatter = Formatter.instance
-    this.formatOptions = formatOptions
+  constructor(value: MoneyInput = 0, options: FormatOptions = {}) {
+    this.calculator = CalculatorService.instance
+    this.converter = ConversionService.instance
+    this.formatter = FormattingService.instance
+    this.formatOptions = options
     this.#cents = this.converter.toCents(value)
   }
 
   //# Construção
-  private static fromCents(
-    value: number,
-    formatOptions: FormatOptions = {},
-  ): Money {
-    const currency = new Money(0, formatOptions)
-    currency.#cents = Math.round(value)
-    return currency
-  }
+  // private static fromCents(value: number, options: FormatOptions): Money {
+  //   const currency = new Money(0, options)
+  //   currency.#cents = Math.round(value)
+  //   return currency
+  // }
 
   //# Obtenção de Valores
-  get cents(): number {
+  public get cents(): number {
     return this.#cents
   }
 
-  get value(): number {
+  public get value(): number {
     return this.#cents / CENT_FACTOR
   }
 
-  get integer(): number {
+  public get integer(): number {
     return Math.floor(Math.abs(this.#cents) / CENT_FACTOR)
   }
 
-  get decimal(): number {
+  public get decimal(): number {
     return (Math.abs(this.#cents) % CENT_FACTOR) / CENT_FACTOR
   }
 
-  toString(): string {
+  public toString(): string {
     return this.value.toFixed(2)
   }
 
-  valueOf(): number {
+  public valueOf(): number {
     return this.value
   }
 
   //# Verificações de Estado
-  isZero(): boolean {
+  public isZero(): boolean {
     return this.#cents === 0
   }
 
-  isPositive(): boolean {
+  public isPositive(): boolean {
     return this.#cents > 0
   }
 
-  isNegative(): boolean {
+  public isNegative(): boolean {
     return this.#cents < 0
   }
 
-  //# Comparação
-  equals(value: CurrencyInput): boolean {
+  //# COMPARAÇÃO
+  public equals(value: MoneyInput): boolean {
     return this.#cents === this.converter.toCents(value)
   }
 
-  greaterThan(value: CurrencyInput): boolean {
+  public greaterThan(value: MoneyInput): boolean {
     return this.#cents > this.converter.toCents(value)
   }
 
-  lessThan(value: CurrencyInput): boolean {
+  public lessThan(value: MoneyInput): boolean {
     return this.#cents < this.converter.toCents(value)
   }
 
-  greaterThanOrEqual(value: CurrencyInput): boolean {
+  public greaterThanOrEqual(value: MoneyInput): boolean {
     return this.#cents >= this.converter.toCents(value)
   }
 
-  lessThanOrEqual(value: CurrencyInput): boolean {
+  public lessThanOrEqual(value: MoneyInput): boolean {
     return this.#cents <= this.converter.toCents(value)
   }
 
-  max(value: CurrencyInput): Money {
+  public max(value: MoneyInput): Money {
     const otherCents = this.converter.toCents(value)
     return Money.fromCents(
       Math.max(this.#cents, otherCents),
@@ -97,7 +102,7 @@ export class Money {
     )
   }
 
-  min(value: CurrencyInput): Money {
+  public min(value: MoneyInput): Money {
     const otherCents = this.converter.toCents(value)
     return Money.fromCents(
       Math.min(this.#cents, otherCents),
@@ -106,33 +111,33 @@ export class Money {
   }
 
   //# Operações Básicas
-  abs(): Money {
+  public abs(): Money {
     if (this.isPositive() || this.isZero()) return this
     return Money.fromCents(Math.abs(this.#cents), this.formatOptions)
   }
 
-  add(value: CurrencyInput): Money {
+  public plus(value: MoneyInput): Money {
     const valueCents = this.converter.toCents(value)
     if (valueCents === 0) return this
 
     return Money.fromCents(this.cents + valueCents, this.formatOptions)
   }
 
-  subtract(value: CurrencyInput): Money {
+  public minus(value: MoneyInput): Money {
     const valueCents = this.converter.toCents(value)
     if (valueCents === 0) return this
 
     return Money.fromCents(this.cents - valueCents, this.formatOptions)
   }
 
-  multiply(factor: number): Money {
+  public times(factor: number): Money {
     if (factor <= 0)
       throw new Error('O fator de multiplicação deve ser positivo.')
     if (factor === 1) return this
     return Money.fromCents(Math.round(this.#cents * factor), this.formatOptions)
   }
 
-  divide(divisor: number): Money {
+  public divideBy(divisor: number): Money {
     if (divisor <= 0)
       throw new Error('Não é possível dividir por zero ou negativo.')
 
@@ -146,27 +151,27 @@ export class Money {
     )
   }
 
-  negate(): Money {
+  public negate(): Money {
     if (this.isZero()) return this
     return Money.fromCents(-this.#cents, this.formatOptions)
   }
 
   //# Percentuais e Descontos
-  percentage(percentage: number): Money {
+  public percentage(percentage: number): Money {
     if (percentage <= 0) {
       throw new Error('A porcentagem não pode ser zero ou negativo.')
     }
     return this.multiply(percentage / 100)
   }
 
-  applyDiscount(discountPercentage: number): Money {
+  public applyDiscount(discountPercentage: number): Money {
     if (discountPercentage <= 0) {
       throw new Error('O percentual de desconto não pode ser zero ou negativo.')
     }
     return this.subtract(this.percentage(discountPercentage))
   }
 
-  applySurcharge(surchargePercentage: number): Money {
+  public applySurcharge(surchargePercentage: number): Money {
     if (surchargePercentage <= 0) {
       throw new Error(
         'O percentual de acréscimo não pode ser zero ou negativo.',
@@ -176,35 +181,22 @@ export class Money {
   }
 
   //# Arredondamento
-  round(
+  public round(
     precision: number = 1,
     mode: RoundingModes = ROUNDING_MODES.ROUND,
   ): Money {
-    if (precision <= 0) throw new Error('A precisão deve ser maior que zero.')
-
-    if (precision === 1 && this.#cents % precision === 0) return this
-
-    let roundedCents: number
-
-    switch (mode) {
-      case ROUNDING_MODES.FLOOR:
-        roundedCents = Math.floor(this.#cents / precision) * precision
-        break
-      case ROUNDING_MODES.CEIL:
-        roundedCents = Math.ceil(this.#cents / precision) * precision
-        break
-      case ROUNDING_MODES.ROUND:
-      default:
-        roundedCents = Math.round(this.#cents / precision) * precision
-        break
-    }
+   const roundedCents = this.calculator.round(
+      this.#cents,
+      precision,
+      mode,
+    )
 
     if (roundedCents === this.#cents) return this
     return Money.fromCents(roundedCents, this.formatOptions)
   }
 
   //# Formatação
-  format(options: FormatOptions = {}): string {
+  public format(options: options = {}): string {
     const mergedOptions = { ...this.formatOptions, ...options }
     return this.formatter.format(this, mergedOptions)
   }
