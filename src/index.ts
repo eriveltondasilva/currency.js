@@ -4,9 +4,12 @@ import type { FormatOptions, MoneyInput } from './types.ts'
 
 function currency(
   value: MoneyInput = 0,
-  formatOptions: FormatOptions = {},
 ): Money {
-  return new Money(value, formatOptions)
+  return new Money(value)
+}
+
+currency.config = (options: FormatOptions): Money => {
+  return new Money(0, options)
 }
 
 export { currency, Money }
