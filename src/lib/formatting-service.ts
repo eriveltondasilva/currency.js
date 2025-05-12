@@ -20,12 +20,15 @@ export class FormattingService implements IFormattingService {
 
     const extractedMoney = this.extractNumericValue(value)
 
+    const DEFAULT_FRACTION_DIGITS = 2
+    const DEFAULT_CURRENCY = 'USD'
+
     const {
-      currencyCode = 'BRL',
+      currencyCode = DEFAULT_CURRENCY,
       locale = CURRENCY_LOCALES[currencyCode],
       showSymbol = true,
-      minimumFractionDigits = 2,
-      maximumFractionDigits = 2,
+      minimumFractionDigits = DEFAULT_FRACTION_DIGITS,
+      maximumFractionDigits = DEFAULT_FRACTION_DIGITS,
     } = options
 
     return new Intl.NumberFormat(locale, {

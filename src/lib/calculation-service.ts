@@ -6,15 +6,15 @@ import type { MoneyInput, PricedItem } from '../types.ts'
 /**
  * Classe responsável por operações matemáticas com valores monetários
  */
-export class CalculatorService {
-  static _instance: CalculatorService
+export class CalculationService {
+  static _instance: CalculationService
   private readonly converter: ConversionService
 
   private constructor() {
     this.converter = ConversionService.instance
   }
 
-  public static get instance(): CalculatorService {
+  public static get instance(): CalculationService {
     return (this._instance ??= new this())
   }
 
@@ -67,7 +67,7 @@ export class CalculatorService {
     return cents / divisor
   }
 
-  percentage(value: number, percentage: number): number {
+  public percentage(value: number, percentage: number): number {
     return this.multiplication(value, percentage / 100)
   }
 

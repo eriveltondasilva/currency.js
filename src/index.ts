@@ -2,15 +2,21 @@ import { Money } from './lib/money.ts'
 
 import type { FormatOptions, MoneyInput } from './types.ts'
 
-function currency(
-  value: MoneyInput = 0,
-): Money {
-  return new Money(value)
+function MoneyFactory(defaultOptions: FormatOptions = {}) {
+  const configureMoney = (value: MoneyInput = 0): Money => {
+    return new Money(value, defaultOptions)
+  }
+
+  configureMoney.configure = (
+    options: FormatOptions,
+  ): ((value?: MoneyInput) => Money) => {
+    return MoneyFactory({ ...defaultOptions, ...options })
+  }
+
+  return configureMoney
 }
 
-currency.config = (options: FormatOptions): Money => {
-  return new Money(0, options)
-}
+const money = MoneyFactory()
 
-export { currency, Money }
-export default currency
+export { money }
+export default money
