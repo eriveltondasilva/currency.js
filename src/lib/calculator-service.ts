@@ -1,6 +1,5 @@
-import { isEmpty } from '../utils/is.ts'
-import { ConversionService } from './converter-service.ts'
-import { Money } from './money.ts'
+import { isEmpty, isNil } from '../utils/is.ts'
+import { ConversionService } from './conversion-service.ts'
 
 import type { MoneyInput, PricedItem } from '../types.ts'
 
@@ -8,7 +7,7 @@ import type { MoneyInput, PricedItem } from '../types.ts'
  * Classe responsável por operações matemáticas com valores monetários
  */
 export class CalculatorService {
-  static #instance: CalculatorService | null = null
+  static _instance: CalculatorService
   private readonly converter: ConversionService
 
   private constructor() {
@@ -16,34 +15,60 @@ export class CalculatorService {
   }
 
   public static get instance(): CalculatorService {
-    if (!CalculatorService.#instance) {
-      CalculatorService.#instance = new CalculatorService()
-    }
-    return CalculatorService.#instance
+    return (this._instance ??= new this())
   }
 
   //###
   public addition(firstValue: number, secondValue: number): number {
-    return firstValue + secondValue
+    if (Number.isNaN(firstValue) || Number.isNaN(secondValue)) {
+      throw new Error('Os valores devem ser números válidos.')
+    }
+    return (
+      this.converter.toCents(firstValue) + this.converter.toCents(secondValue)
+    )
   }
 
   public subtraction(firstValue: number, secondValue: number): number {
-    return firstValue - secondValue
+    if (Number.isNaN(firstValue) || Number.isNaN(secondValue)) {
+      throw new Error('Os valores devem ser números válidos.')
+    }
+    return (
+      this.converter.toCents(firstValue) - this.converter.toCents(secondValue)
+    )
   }
 
   public multiplication(value: number, factor: number): number {
-    return value * factor
+    if (Number.isNaN(value) || Number.isNaN(factor)) {
+      throw new Error('Os valores devem ser números válidos.')
+    }
+    if (factor <= 0) {
+      throw new Error(
+        'Não é possível multiplicar por zero ou um número negativo.',
+      )
+    }
+
+    const cents = this.converter.toCents(value)
+
+    if (factor === 1) return cents
+    return cents * factor
   }
 
   public division(value: number, divisor: number): number {
-    if (divisor === 0) {
-      throw new Error('Não é possível dividir por zero.')
+    if (Number.isNaN(value) || Number.isNaN(divisor)) {
+      throw new Error('Os valores devem ser números válidos.')
     }
-    return value / divisor
+    if (divisor <= 0) {
+      throw new Error('Não é possível dividir por zero ou um número negativo.')
+    }
+
+    const cents = this.converter.toCents(value)
+
+    if (divisor === 1) return cents
+    return cents / divisor
   }
 
-  percentage(cents: number, percentage: number): number {
-    return this.multiplication(cents, percentage / 100)
+  percentage(value: number, percentage: number): number {
+    return this.multiplication(value, percentage / 100)
   }
 
   public calculateAveragePrice(items: PricedItem[] | null): number {
@@ -51,24 +76,24 @@ export class CalculatorService {
       return 0
     }
 
-    const validItems = items.filter((item) => item.price !== undefined)
+    const validItems = items.filter((item) => !isNil(item.price))
 
     if (isEmpty(validItems)) {
       return 0
     }
 
-    const total = validItems.reduce((sum: number, item: PricedItem) => {
+    const total = validItems.reduce((sum, item) => {
       return sum + this.converter.toCents(item.price || 0)
     }, 0)
 
-    return Math.round(total / validItems.length)
+    return this.division(total, validItems.length)
   }
 
-  public calculateSubtotal(unitPrice: MoneyInput, quantity: number): Money {
-    if (quantity < 0) throw new Error('A quantidade não pode ser negativa.')
+  public calculateSubtotal(unitPrice: MoneyInput, quantity: number): number {
+    if (quantity <= 0) throw new Error('A quantidade não pode ser negativa.')
 
-    const price = new Money(unitPrice)
-    return price.multiply(quantity)
+    const price = this.converter.toCents(unitPrice)
+    return this.multiplication(price, quantity)
   }
 
   public calculateTotal(items: PricedItem[] | null): number {
@@ -95,9 +120,9 @@ export class CalculatorService {
       throw new Error('O número de parcelas deve ser maior que zero.')
     }
 
-    const total = new Money(value)
-    const baseCents = Math.floor(total.cents / numberOfInstallments)
-    const remainder = total.cents % numberOfInstallments
+    const cents = this.converter.toCents(value)
+    const baseCents = Math.floor(cents / numberOfInstallments)
+    const remainder = cents % numberOfInstallments
 
     return Array.from({ length: numberOfInstallments }, (_, i) => {
       return baseCents + (i < remainder ? 1 : 0)

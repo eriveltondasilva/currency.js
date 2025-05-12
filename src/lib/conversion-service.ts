@@ -16,17 +16,11 @@ export class ConversionService implements IConversionService {
 
   //###
   public toCents(value: MoneyInput): number {
-    if (isNil(value)) {
-      throw new Error('O valor não pode ser nulo ou indefinido')
-    }
+    if (isNil(value)) throw new Error('O valor não pode ser nulo ou indefinido')
 
-    if (isObject(value) && 'cents' in value) {
-      return value.cents
-    }
+    if (isObject(value) && 'cents' in value) return value.cents
 
-    if (isString(value)) {
-      return this.stringToCents(value)
-    }
+    if (isString(value)) return this.stringToCents(value)
 
     return this.numberToCents(Number(value))
   }
@@ -38,9 +32,7 @@ export class ConversionService implements IConversionService {
 
     if (value === 0) return 0
 
-    return Number.isInteger(value) ?
-        value * CENT_FACTOR
-      : Math.round(value * CENT_FACTOR)
+    return Math.round(value * CENT_FACTOR)
   }
 
   //
@@ -51,8 +43,9 @@ export class ConversionService implements IConversionService {
     if (!cleanValue) return 0
 
     const normalizedValue = this.normalizeDecimalFormat(cleanValue)
-    const numberValue = Number.parseFloat(normalizedValue)
-    return this.numberToCents(numberValue)
+    const numericValue = Number.parseFloat(normalizedValue)
+
+    return this.numberToCents(numericValue)
   }
 
   //
