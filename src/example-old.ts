@@ -1,24 +1,31 @@
 // Exemplo de uso
-import { money } from './index.ts'
+import { BRL, Calculator, EUR, Money } from './index.ts'
 
 // Configuração padrão
-const price = money(55.99)
+const price = Money(55.99)
 console.log('Valor padrão:', price.format()) // $55,99
 
-// Configuração personalizada
-const brMoney = money.configure({
-  currencyCode: 'BRL',
-})
+// Configuração BR
+const brPrice = BRL(55.99)
+console.log('Valor em reais:', brPrice.format()) // R$ 55,99
 
-const brPrice = brMoney(55.99)
-const brSum = brPrice.plus(4.55)
-console.log('Valor em reais:', brSum.format()) // R$ 60,54
+// Configuração EUR
+const eurPrice = EUR(55.99)
+console.log('Valor em euros:', eurPrice.format()) // 55.99 €
+console.log()
 
-// Outros exemplos
-const eurMoney = money.configure({
-  currencyCode: 'EUR',
-})
+Calculator.setConfigure({ currencyCode: 'BRL' })
 
-const eurPrice = eurMoney(55.99)
-const eurSum = eurPrice.plus(4.55)
-console.log('Valor em euros:', eurSum.format()) // 55.99 €
+const sum = Calculator.addition(10, 5) // 15
+console.log('Soma:', sum.format()) // $15,00
+
+const sub = Calculator.subtraction(10.4, 5.1) // 5
+console.log('Subtração:', sub.format()) // $5,00
+
+Calculator.setConfigure({ currencyCode: 'EUR' })
+
+const mul = Calculator.multiplication(10, 5) // 50
+console.log('Multiplicação:', mul.format()) // $50,00
+
+const div = Calculator.division(10, 5) // 2
+console.log('Divisão:', div.format()) // $2,00
