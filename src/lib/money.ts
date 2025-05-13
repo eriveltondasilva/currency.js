@@ -411,15 +411,10 @@ export class Money implements IMoney {
    * console.log(rounded.value); // 10.6
    */
   public round(
-    precision: number = 1,
-    mode: RoundingModes = ROUNDING_MODES.ROUND,
+    precision?: number,
+    mode?: RoundingModes,
   ): Money {
-    if (precision <= 0) {
-      throw new Error('A precisão deve ser um número positivo')
-    }
-
     const roundedCents = this.rounder.round(this._cents, precision, mode)
-
     if (roundedCents === this._cents) return this.clone()
     return Money.fromCents(roundedCents, this.formatOptions)
   }

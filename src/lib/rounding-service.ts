@@ -12,24 +12,50 @@ export class RoundingService implements IRoundingService {
   }
 
   /**
-   * Arredonda um valor numérico de acordo com a precisão e o modo de arredondamento especificados.
+   * Arredonda um valor em centavos de acordo com o modo e precisão especificados.
    *
-   * @param value - O valor a ser arredondado
-   * @param precision - A precisão do arredondamento (deve ser maior que zero)
-   * @param mode - O modo de arredondamento a ser utilizado
-   * @returns O valor arredondado de acordo com os parâmetros especificados
+   * @param cents - O valor em centavos a ser arredondado
+   * @param precision - A precisão do arredondamento (padrão: 1)
+   * @param mode - O modo de arredondamento a ser utilizado (padrão: ROUND)
+   * @returns O valor arredondado em centavos
+   *
+   * @example
+   * // Arredondar 1056 centavos (10.56) para a próxima dezena (10.60)
+   * RoundingService.instance.round(1056, 10, ROUNDING_MODES.CEIL); // Retorna 1060
    */
-  public round(value: number, precision: number, mode: RoundingModes): number {
-    if (precision === 1 && Number.isInteger(value)) return value
+  public round(
+    cents: number,
+    precision: number = 1,
+    mode: RoundingModes = ROUNDING_MODES.ROUND,
+  ): number {
+    if (precision <= 0) throw new Error('A precisão deve ser um número positivo')
+
+   // Se a precisão for 1, não há arredondamento a ser feito
+    if (precision === 1) return cents
+
+    const isNegative = cents < 0
+    const absoluteCents = Math.abs(cents)
+    let result: number
 
     switch (mode) {
       case ROUNDING_MODES.FLOOR:
-        return Math.floor(value / precision) * precision
+        result = Math.floor(absoluteCents / precision) * precision
+        break
+
       case ROUNDING_MODES.CEIL:
-        return Math.ceil(value / precision) * precision
+        result = Math.ceil(absoluteCents / precision) * precision
+        break
+
+      case ROUNDING_MODES.TRUNC:
+        result = Math.trunc(absoluteCents / precision) * precision
+        break
+
       case ROUNDING_MODES.ROUND:
       default:
-        return Math.round(value / precision) * precision
+        result = Math.round(absoluteCents / precision) * precision
+        break
     }
+
+    return isNegative ? -result : result
   }
 }
