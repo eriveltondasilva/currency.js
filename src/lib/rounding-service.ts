@@ -1,10 +1,8 @@
 import { ROUNDING_MODES } from '../config/constants.ts'
 
-import type { RoundingModes, IRoundingService } from '../types.ts'
+import type { IRoundingService, RoundingModes } from '../types.ts'
 
-/**
- * Classe responsável pela formatação de valores monetários
- */
+/** Classe responsável pelo arredondamento de valores monetários. */
 export class RoundingService implements IRoundingService {
   private static _instance: RoundingService
 
@@ -13,11 +11,16 @@ export class RoundingService implements IRoundingService {
     return (this._instance ??= new this())
   }
 
-  //#
-  round(value: number, precision: number, mode: RoundingModes): number {
-    if (precision <= 0) throw new Error('A precisão deve ser maior que zero.')
-
-    if (precision === 1 && value % precision === 0) return value
+  /**
+   * Arredonda um valor numérico de acordo com a precisão e o modo de arredondamento especificados.
+   *
+   * @param value - O valor a ser arredondado
+   * @param precision - A precisão do arredondamento (deve ser maior que zero)
+   * @param mode - O modo de arredondamento a ser utilizado
+   * @returns O valor arredondado de acordo com os parâmetros especificados
+   */
+  public round(value: number, precision: number, mode: RoundingModes): number {
+    if (precision === 1 && Number.isInteger(value)) return value
 
     switch (mode) {
       case ROUNDING_MODES.FLOOR:

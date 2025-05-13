@@ -1,6 +1,6 @@
 import { isEmpty, isNil } from '../utils/is.ts'
 import { ConversionService } from './conversion-service.ts'
-import { MoneyFacade } from './money-facade.ts'
+import { Money } from './money.ts'
 
 import type {
   FormatOptions,
@@ -9,20 +9,7 @@ import type {
   PricedItem,
 } from '../types.ts'
 
-/**
- * Classe responsável por operações matemáticas com valores monetários.
- * Implementa o padrão Singleton para garantir uma única instância em toda a aplicação.
- *
- * @example
- * // Obter a instância do serviço
- * const calculator = CalculationService.instance
- *
- * // Configurar opções de formatação
- * calculator.setConfigure({ currencyCode: 'BRL' })
- *
- * // Realizar operações
- * const total = calculator.addition('10.50', 5.75)
- */
+/** Classe responsável por operações matemáticas com valores monetários. */
 export class CalculationService implements ICalculationService {
   static _instance: CalculationService
   private readonly converter: ConversionService = ConversionService.instance
@@ -34,18 +21,16 @@ export class CalculationService implements ICalculationService {
     return (this._instance ??= new this())
   }
 
-  // ###
-
   /**
    * Configura as opções de formatação para os resultados
    *
    * @example
    * calculator.setConfigure({
-   *   currencyCode?: 'BRL',
-   *   locale?: 'pt-BR',
-   *   showSymbol?: true,
-   *   minimumFractionDigits?: 2,
-   *   maximumFractionDigits?: 2,
+   *   currencyCode: 'BRL',
+   *   locale: 'pt-BR',
+   *   showSymbol: true,
+   *   minimumFractionDigits: 2,
+   *   maximumFractionDigits: 2,
    * });
    *
    * @param options Opções de formatação
@@ -66,15 +51,12 @@ export class CalculationService implements ICalculationService {
    *
    * @param firstValue Primeiro valor
    * @param secondValue Segundo valor
-   * @returns Resultado da soma como MoneyFacade
+   * @returns Resultado da soma como Money
    */
-  public addition(
-    firstValue: MoneyInput,
-    secondValue: MoneyInput,
-  ): MoneyFacade {
+  public addition(firstValue: MoneyInput, secondValue: MoneyInput): Money {
     const result =
       this.converter.toCents(firstValue) + this.converter.toCents(secondValue)
-    return MoneyFacade.fromCents(result, this.formatOptions)
+    return Money.fromCents(result, this.formatOptions)
   }
 
   /**
@@ -87,15 +69,12 @@ export class CalculationService implements ICalculationService {
    *
    * @param firstValue Valor base
    * @param secondValue Valor a ser subtraído
-   * @returns Resultado da subtração como MoneyFacade
+   * @returns Resultado da subtração como Money
    */
-  public subtraction(
-    firstValue: MoneyInput,
-    secondValue: MoneyInput,
-  ): MoneyFacade {
+  public subtraction(firstValue: MoneyInput, secondValue: MoneyInput): Money {
     const result =
       this.converter.toCents(firstValue) - this.converter.toCents(secondValue)
-    return MoneyFacade.fromCents(result, this.formatOptions)
+    return Money.fromCents(result, this.formatOptions)
   }
 
   /**
@@ -108,9 +87,10 @@ export class CalculationService implements ICalculationService {
    *
    * @param value Valor monetário
    * @param factor Fator de multiplicação
-   * @returns Resultado da multiplicação como MoneyFacade
+   * @returns Resultado da multiplicação como Money
+   * @throws Error se o fator for zero ou negativo
    */
-  public multiplication(value: MoneyInput, factor: number): MoneyFacade {
+  public multiplication(value: MoneyInput, factor: number): Money {
     if (factor <= 0) {
       throw new Error(
         'Não é possível multiplicar por zero ou um número negativo.',
@@ -118,7 +98,7 @@ export class CalculationService implements ICalculationService {
     }
 
     const cents = this.converter.toCents(value)
-    return MoneyFacade.fromCents(cents * factor, this.formatOptions)
+    return Money.fromCents(cents * factor, this.formatOptions)
   }
 
   /**
@@ -131,15 +111,16 @@ export class CalculationService implements ICalculationService {
    *
    * @param value Valor monetário
    * @param divisor Divisor
-   * @returns Resultado da divisão como MoneyFacade
+   * @returns Resultado da divisão como Money
+   * @throws Error se o divisor for zero ou negativo
    */
-  public division(value: MoneyInput, divisor: number): MoneyFacade {
+  public division(value: MoneyInput, divisor: number): Money {
     if (divisor <= 0) {
       throw new Error('Não é possível dividir por zero ou um número negativo.')
     }
 
     const cents = this.converter.toCents(value)
-    return MoneyFacade.fromCents(cents / divisor, this.formatOptions)
+    return Money.fromCents(cents / divisor, this.formatOptions)
   }
 
   /**
@@ -152,9 +133,10 @@ export class CalculationService implements ICalculationService {
    *
    * @param value Valor monetário
    * @param percentage Porcentagem a ser calculada
-   * @returns Resultado do cálculo como MoneyFacade
+   * @returns Resultado do cálculo como Money
+   * @throws Error se a porcentagem for zero ou negativa
    */
-  public percentage(value: MoneyInput, percentage: number): MoneyFacade {
+  public percentage(value: MoneyInput, percentage: number): Money {
     if (percentage <= 0) {
       throw new Error('A porcentagem não pode ser zero ou negativa.')
     }
@@ -175,24 +157,24 @@ export class CalculationService implements ICalculationService {
    * console.log(average.format()); // R$ 15,42
    *
    * @param items Lista de itens com preço
-   * @returns Preço médio como MoneyFacade
+   * @returns Preço médio como Money
    */
-  public calculateAveragePrice(items: PricedItem[] | null): MoneyFacade {
+  public calculateAveragePrice(items: PricedItem[] | null): Money {
     if (!items || isEmpty(items)) {
-      return MoneyFacade.zero(this.formatOptions)
+      return Money.zero(this.formatOptions)
     }
 
     const validItems = items.filter(({ price }) => !isNil(price))
 
     if (isEmpty(validItems)) {
-      return MoneyFacade.zero(this.formatOptions)
+      return Money.zero(this.formatOptions)
     }
 
     const total = validItems.reduce((sum, { price }) => {
       return sum + this.converter.toCents(price || 0)
     }, 0)
 
-    return MoneyFacade.fromCents(total / validItems.length, this.formatOptions)
+    return Money.fromCents(total / validItems.length, this.formatOptions)
   }
 
   /**
@@ -205,11 +187,11 @@ export class CalculationService implements ICalculationService {
    * console.log(subtotal.format()); // R$ 31,50
    *
    * @param item item com preço e quantidade
-   * @returns Subtotal como MoneyFacade
+   * @returns Subtotal como Money
    */
-  public calculateSubtotal({ price, quantity = 1 }: PricedItem): MoneyFacade {
+  public calculateSubtotal({ price, quantity = 1 }: PricedItem): Money {
     const cents = this.converter.toCents(price || 0)
-    return MoneyFacade.fromCents(cents * quantity, this.formatOptions)
+    return Money.fromCents(cents * quantity, this.formatOptions)
   }
 
   /**
@@ -226,11 +208,11 @@ export class CalculationService implements ICalculationService {
    * console.log(total.format()); // R$ 97,75
    *
    * @param items Lista de itens com preço e quantidade
-   * @returns Total como MoneyFacade
+   * @returns Total como Money
    */
-  public calculateTotal(items: PricedItem[] | null): MoneyFacade {
+  public calculateTotal(items: PricedItem[] | null): Money {
     if (!items || isEmpty(items)) {
-      return MoneyFacade.zero(this.formatOptions)
+      return Money.zero(this.formatOptions)
     }
 
     const total = items.reduce((sum, { price, quantity = 1 }) => {
@@ -242,7 +224,7 @@ export class CalculationService implements ICalculationService {
       return sum + itemTotal
     }, 0)
 
-    return MoneyFacade.fromCents(total, this.formatOptions)
+    return Money.fromCents(total, this.formatOptions)
   }
 
   /**
@@ -260,13 +242,13 @@ export class CalculationService implements ICalculationService {
    *
    * @param value Valor total a ser parcelado
    * @param numberOfInstallments Número de parcelas
-   * @returns Array de parcelas como MoneyFacade[]
+   * @returns Array de parcelas como Money[]
    * @throws Error se o número de parcelas for menor ou igual a zero
    */
   public distributeInstallments(
     value: MoneyInput,
     numberOfInstallments: number,
-  ): MoneyFacade[] {
+  ): Money[] {
     if (numberOfInstallments <= 0) {
       throw new Error('O número de parcelas deve ser maior que zero.')
     }
@@ -277,7 +259,7 @@ export class CalculationService implements ICalculationService {
 
     return Array.from({ length: numberOfInstallments }, (_, i) => {
       const installmentValue = baseCents + (i < remainder ? 1 : 0)
-      return MoneyFacade.fromCents(installmentValue, this.formatOptions)
+      return Money.fromCents(installmentValue, this.formatOptions)
     })
   }
 }

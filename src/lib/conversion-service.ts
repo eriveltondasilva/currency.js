@@ -3,9 +3,7 @@ import { isNil, isObject, isString } from '../utils/is.ts'
 
 import type { IConversionService, MoneyInput } from '../types.ts'
 
-/**
- * Classe responsável pela conversão de diferentes tipos de entrada para centavos
- */
+/** Classe responsável pela conversão de diferentes tipos de entrada para centavos. */
 export class ConversionService implements IConversionService {
   private static _instance: ConversionService
 
@@ -14,7 +12,12 @@ export class ConversionService implements IConversionService {
     return (this._instance ??= new this())
   }
 
-  //###
+  /**
+   * Converte um valor para centavos, independente do tipo de entrada.
+   * @param value - O valor a ser convertido para centavos
+   * @returns O valor em centavos
+   * @throws Error se o valor for nulo, indefinido ou inválido
+   */
   public toCents(value: MoneyInput): number {
     if (isNil(value)) throw new Error('O valor não pode ser nulo ou indefinido')
 
@@ -25,7 +28,13 @@ export class ConversionService implements IConversionService {
     return this.numberToCents(Number(value))
   }
 
-  //#
+  /**
+   * Converte um número para centavos.
+   * @param value - O número a ser convertido
+   * @returns O valor em centavos
+   * @throws Error se o valor não for um número válido
+   * @private
+   */
   private numberToCents(value: number): number {
     if (Number.isNaN(value))
       throw new Error('O valor deve ser um número válido')
@@ -35,7 +44,12 @@ export class ConversionService implements IConversionService {
     return Math.round(value * CENT_FACTOR)
   }
 
-  //
+  /**
+   * Converte uma string para centavos.
+   * @param value - A string a ser convertida
+   * @returns O valor em centavos
+   * @private
+   */
   private stringToCents(value: string): number {
     if (!value.trim()) return 0
 
@@ -48,7 +62,12 @@ export class ConversionService implements IConversionService {
     return this.numberToCents(numericValue)
   }
 
-  //
+  /**
+   * Normaliza o formato decimal da string, tratando formatos brasileiros e internacionais.
+   * @param value - A string a ser normalizada
+   * @returns A string normalizada no formato decimal padrão
+   * @private
+   */
   private normalizeDecimalFormat(value: string): string {
     const hasBrazilianFormat =
       value.lastIndexOf(',') > value.lastIndexOf('.') ||

@@ -3,9 +3,7 @@ import { isNil, isObject } from '../utils/is.ts'
 
 import type { FormatOptions, IFormattingService, MoneyInput } from '../types.ts'
 
-/**
- * Classe responsável pela formatação de valores monetários
- */
+/** Classe responsável pela formatação de valores monetários. */
 export class FormattingService implements IFormattingService {
   private static _instance: FormattingService
 
@@ -14,7 +12,13 @@ export class FormattingService implements IFormattingService {
     return (this._instance ??= new this())
   }
 
-  //#
+  /**
+   * Formata um valor monetário de acordo com as opções fornecidas
+   * @param value - O valor monetário a ser formatado
+   * @param options - Opções de formatação
+   * @returns String formatada representando o valor monetário
+   * @throws Error se o valor for nulo ou indefinido
+   */
   public format(value: MoneyInput, options: FormatOptions = {}): string {
     if (isNil(value)) throw new Error('O valor não pode ser nulo ou indefinido')
 
@@ -39,7 +43,12 @@ export class FormattingService implements IFormattingService {
     }).format(extractedMoney)
   }
 
-  //#
+  /**
+   * Extrai o valor numérico de um input monetário
+   * @param money - Input monetário (objeto ou valor primitivo)
+   * @returns Valor numérico extraído
+   * @private
+   */
   private extractNumericValue(money: MoneyInput): number {
     return isObject(money) && 'value' in money ? money.value : Number(money)
   }
