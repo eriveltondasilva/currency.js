@@ -159,7 +159,7 @@ export class CalculationService implements ICalculationService {
    * @param items Lista de itens com preço
    * @returns Preço médio como Money
    */
-  public calculateAveragePrice(items: PricedItem[] | null): Money {
+  public calculateAveragePrice(items: Pick<PricedItem, 'price'>[] | null): Money {
     if (!items || isEmpty(items)) {
       return Money.zero(this.formatOptions)
     }

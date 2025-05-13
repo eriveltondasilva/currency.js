@@ -2,6 +2,7 @@ export const ROUNDING_MODES = {
   ROUND: 'round',
   FLOOR: 'floor',
   CEIL: 'ceil',
+  TRUNC: 'trunc',
 } as const
 
 export const CURRENCY_LOCALES = {

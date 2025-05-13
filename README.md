@@ -1,21 +1,4 @@
-# Currency.js - Biblioteca de Manipulação de Moedas
-
-## Descrição
-
-Currency.js é uma biblioteca JavaScript leve e fácil de usar para manipulação, formatação e conversão de valores monetários. Projetada para lidar com cálculos precisos de moedas, evitando problemas comuns de arredondamento de ponto flutuante em JavaScript.
-
-## Recursos
-
-- Operações aritméticas precisas com valores monetários
-- Suporte para diferentes locais e formatos regionais
-- Zero dependências externas
-
-## Instalação
-
-
-
-###########################
-# @eriveltonsilva/currency.js
+# @eriveltonsilva/currency.js - Currency Manipulation Library
 
 A lightweight, robust JavaScript library for currency operations with precision and reliability. Designed to handle monetary values safely, avoiding floating point issues common in financial calculations.
 
@@ -36,12 +19,6 @@ A lightweight, robust JavaScript library for currency operations with precision 
 ```bash
 # npm
 npm install @eriveltonsilva/currency.js
-
-# yarn
-yarn add @eriveltonsilva/currency.js
-
-# pnpm
-pnpm add @eriveltonsilva/currency.js
 ```
 
 ## Basic Usage
@@ -75,28 +52,30 @@ console.log(finalPrice.format({
 // Basic usage
 const a = Money(10.50);       // From number
 const b = Money("10.50");     // From string
-const c = Money(a);           // From another Money instance
+const c = Money("10,50");     // From string with comma
+const d = Money("R$ 10,50");  // From string with currency symbol
+const e = Money(a);           // From another Money instance
 
 // With options
-const d = Money(1050, {
+const f = Money(1050, {
   currencyCode: 'BRL',
-  showSymbol: true,
   locale: 'pt-BR'
-});
+  showSymbol: true,
+}); // R$ 10,50
 
 // Configure with defaults
-const BRL = Money.configure({ currencyCode: 'BRL', locale: 'pt-BR' });
-const price = BRL(25.50);     // R$ 25,50
+const BRL = Money.configure({ currencyCode: 'BRL' });
+const price = BRL(25.50);  // R$ 25,50
 
 // Predefined currencies
 import { USD, EUR, BRL } from '@eriveltonsilva/currency.js';
-const usd = USD(99.99);       // $99.99
-const eur = EUR(99.99);       // €99.99
-const brl = BRL(99.99);       // R$ 99,99
+const usd = USD(99.99);  // $99.99
+const eur = EUR(99.99);  // 99.99 €
+const brl = BRL(99.99);  // R$ 99,99
 
 // Static methods
-const zero = Money.zero();                   // 0.00
-const fromCents = Money.fromCents(1050, {}); // 10.50
+const zero      = Money.zero();               // 0.00
+const fromCents = Money.fromCents(1050, {});  // 10.50
 ```
 
 ### Properties
