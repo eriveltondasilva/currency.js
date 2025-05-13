@@ -1,22 +1,26 @@
-import { Money } from './lib/money.ts'
+import { ROUNDING_MODES } from './config/constants.ts'
+import { CalculationService } from './lib/calculation-service.ts'
+import { MoneyFacade } from './lib/money-facade.ts'
 
 import type { FormatOptions, MoneyInput } from './types.ts'
 
-function MoneyFactory(defaultOptions: FormatOptions = {}) {
-  const configureMoney = (value: MoneyInput = 0): Money => {
-    return new Money(value, defaultOptions)
-  }
+function createMoneyFactory(defaultOptions: FormatOptions = {}) {
+  const factory = (value: MoneyInput = 0) =>
+    new MoneyFacade(value, defaultOptions)
 
-  configureMoney.configure = (
-    options: FormatOptions,
-  ): ((value?: MoneyInput) => Money) => {
-    return MoneyFactory({ ...defaultOptions, ...options })
-  }
+  factory.configure = (options: FormatOptions) =>
+    createMoneyFactory({ ...defaultOptions, ...options })
 
-  return configureMoney
+  return factory
 }
 
-const money = MoneyFactory()
+const Money = createMoneyFactory()
+const Calculator = CalculationService.instance
 
-export { money }
-export default money
+export const USD = Money.configure({ currencyCode: 'USD' })
+export const EUR = Money.configure({ currencyCode: 'EUR' })
+export const BRL = Money.configure({ currencyCode: 'BRL' })
+
+export { Calculator, Money, ROUNDING_MODES }
+export type { FormatOptions, MoneyInput }
+export default Money
