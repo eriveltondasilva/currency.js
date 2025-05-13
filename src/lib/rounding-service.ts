@@ -1,11 +1,11 @@
 import { ROUNDING_MODES } from '../config/constants.ts'
 
-import type { RoundingModes } from '../types.ts'
+import type { RoundingModes, IRoundingService } from '../types.ts'
 
 /**
  * Classe responsável pela formatação de valores monetários
  */
-export class RoundingService {
+export class RoundingService implements IRoundingService {
   private static _instance: RoundingService
 
   private constructor() {}
@@ -14,19 +14,19 @@ export class RoundingService {
   }
 
   //#
-  round(cents: number, precision: number, mode: RoundingModes): number {
+  round(value: number, precision: number, mode: RoundingModes): number {
     if (precision <= 0) throw new Error('A precisão deve ser maior que zero.')
 
-    if (precision === 1 && cents % precision === 0) return cents
+    if (precision === 1 && value % precision === 0) return value
 
     switch (mode) {
       case ROUNDING_MODES.FLOOR:
-        return Math.floor(cents / precision) * precision
+        return Math.floor(value / precision) * precision
       case ROUNDING_MODES.CEIL:
-        return Math.ceil(cents / precision) * precision
+        return Math.ceil(value / precision) * precision
       case ROUNDING_MODES.ROUND:
       default:
-        return Math.round(cents / precision) * precision
+        return Math.round(value / precision) * precision
     }
   }
 }
