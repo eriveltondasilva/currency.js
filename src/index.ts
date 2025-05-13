@@ -1,12 +1,11 @@
 import { ROUNDING_MODES } from './config/constants.ts'
 import { CalculationService } from './lib/calculation-service.ts'
-import { MoneyFacade } from './lib/money-facade.ts'
+import { Money as MoneyLib } from './lib/money.ts'
 
 import type { FormatOptions, MoneyInput } from './types.ts'
 
 function createMoneyFactory(defaultOptions: FormatOptions = {}) {
-  const factory = (value: MoneyInput = 0) =>
-    new MoneyFacade(value, defaultOptions)
+  const factory = (value: MoneyInput = 0) => new MoneyLib(value, defaultOptions)
 
   factory.configure = (options: FormatOptions) =>
     createMoneyFactory({ ...defaultOptions, ...options })

@@ -95,10 +95,10 @@
 // // Parcela 2: R$ 33,33
 // // Parcela 3: R$ 33,33
 
-import { MoneyFacade } from './lib/money-facade.ts'
+import { Money } from './lib/money.ts'
 
 // Criando uma instância de Money com valor 10.99
-const price = new MoneyFacade(10.99)
+const price = new Money(10.99)
 
 // Demonstração das propriedades básicas
 console.log('Valor numérico:', price.value) // 10.99
@@ -116,7 +116,7 @@ console.log('Sem símbolo:', price.format({ showSymbol: false })) // 10,99
 console.log()
 
 // Demonstração de operações
-const anotherPrice = new MoneyFacade(5.5)
+const anotherPrice = new Money(5.5)
 console.log('Valor novo:', anotherPrice.format()) // R$ 10,99
 console.log('Soma:', price.add(anotherPrice).format()) // R$ 16,49
 console.log('Subtração:', price.subtract(anotherPrice).format()) // R$ 5,49
