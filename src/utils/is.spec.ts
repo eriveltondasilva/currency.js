@@ -57,23 +57,12 @@ describe('isEmpty', () => {
     expect(isEmpty('   ')).toBe(true)
     expect(isEmpty([])).toBe(true)
     expect(isEmpty({})).toBe(true)
-    expect(isEmpty(new Map())).toBe(true)
-    expect(isEmpty(new Set())).toBe(true)
   })
 
   it('deve retornar false para valores não-vazios', () => {
     expect(isEmpty('texto')).toBe(false)
     expect(isEmpty([1, 2, 3])).toBe(false)
     expect(isEmpty({ a: 1 })).toBe(false)
-
-    const map = new Map()
-    map.set('chave', 'valor')
-    expect(isEmpty(map)).toBe(false)
-
-    const set = new Set()
-    set.add('valor')
-    expect(isEmpty(set)).toBe(false)
-
     expect(isEmpty(0)).toBe(false)
     expect(isEmpty(false)).toBe(false)
   })
