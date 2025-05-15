@@ -10,7 +10,7 @@ export type MoneyInput = number | string | Money
 
 export interface PricedItem {
   price: MoneyInput
-  quantity: number
+  quantity?: number
   [key: string]: unknown
 }
 
