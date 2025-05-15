@@ -159,7 +159,9 @@ export class CalculationService implements ICalculationService {
    * @param items Lista de itens com preço
    * @returns Preço médio como Money
    */
-  public calculateAveragePrice(items: Pick<PricedItem, 'price'>[] | null): Money {
+  public calculateAveragePrice(
+    items: Pick<PricedItem, 'price'>[] | null,
+  ): Money {
     if (!items || isEmpty(items)) {
       return Money.zero(this.formatOptions)
     }
@@ -205,7 +207,7 @@ export class CalculationService implements ICalculationService {
    *   { name: 'Produto 3', price: '20.00', quantity: 3 }
    * ];
    * const total = calculator.calculateTotal(items);
-   * console.log(total.format()); // R$ 97,75
+   * console.log(total.format()); // R$ 96,75
    *
    * @param items Lista de itens com preço e quantidade
    * @returns Total como Money
@@ -249,8 +251,8 @@ export class CalculationService implements ICalculationService {
     value: MoneyInput,
     numberOfInstallments: number,
   ): Money[] {
-    if (numberOfInstallments <= 0) {
-      throw new Error('O número de parcelas deve ser maior que zero.')
+    if (!Number.isInteger(numberOfInstallments) || numberOfInstallments <= 0) {
+      throw new Error('O número de parcelas deve ser um inteiro positivo.')
     }
 
     const cents = this.converter.toCents(value)
