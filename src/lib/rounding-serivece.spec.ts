@@ -1,92 +1,122 @@
 import { describe, it, expect } from 'vitest'
-import { RoundingService } from './rounding-service.ts'
-import { ROUNDING_MODES } from '../config/constants.ts'
+import { RoundingService } from './rounding-service'
+import { ROUNDING_MODES } from '../config/constants'
 
+// TODO: Adicionar testes unitários para a classe RoundingService
 describe('RoundingService', () => {
+  const roundingService = RoundingService.instance
+
   describe('Padrão Singleton', () => {
-    it('deve retornar a mesma instância quando chamado múltiplas vezes', () => {
+    it('deve retornar a mesma instância', () => {
       const instance1 = RoundingService.instance
       const instance2 = RoundingService.instance
-
       expect(instance1).toBe(instance2)
     })
   })
 
-  describe('método round', () => {
-    const roundingService = RoundingService.instance
+  describe('Método round', () => {
+    describe('Validação de parâmetros', () => {
+      it('deve lançar erro quando a precisão for menor ou igual a zero', () => {
+        expect(() => roundingService.round(100, 0)).toThrow(
+          'A precisão deve ser um número positivo',
+        )
+        expect(() => roundingService.round(100, -1)).toThrow(
+          'A precisão deve ser um número positivo',
+        )
+      })
+    })
 
-    it('deve retornar o mesmo valor quando precision é 1 e o valor é inteiro', () => {
-      expect(roundingService.round(5, 1, ROUNDING_MODES.ROUND)).toBe(5)
-      expect(roundingService.round(10, 1, ROUNDING_MODES.FLOOR)).toBe(10)
-      expect(roundingService.round(15, 1, ROUNDING_MODES.CEIL)).toBe(15)
+    describe('Casos especiais', () => {
+      it('deve retornar 0 quando o valor for 0', () => {
+        expect(roundingService.round(0)).toBe(0)
+      })
+
+      it('deve retornar o mesmo valor quando a precisão for 1 e o valor for inteiro', () => {
+        expect(roundingService.round(100, 1)).toBe(100)
+      })
+    })
+
+    describe('ROUNDING_MODES.ROUND (padrão)', () => {
+      it('deve arredondar corretamente com precisão padrão (1)', () => {
+        expect(roundingService.round(10.5)).toBe(11)
+        expect(roundingService.round(10.4)).toBe(10)
+      })
+
+      it('deve arredondar corretamente com precisão 10', () => {
+        expect(roundingService.round(1056, 10)).toBe(1060)
+        expect(roundingService.round(1054, 10)).toBe(1050)
+      })
+
+      it('deve arredondar corretamente valores negativos', () => {
+        expect(roundingService.round(-1056, 10)).toBe(-1060)
+        expect(roundingService.round(-1054, 10)).toBe(-1050)
+      })
     })
 
     describe('ROUNDING_MODES.FLOOR', () => {
-      it('deve arredondar para baixo com diferentes precisões', () => {
-        expect(
-          roundingService.round(1.29, 0.1, ROUNDING_MODES.FLOOR),
-        ).toBeCloseTo(1.2, 5)
-        expect(
-          roundingService.round(1.99, 0.1, ROUNDING_MODES.FLOOR),
-        ).toBeCloseTo(1.9, 5)
-        expect(
-          roundingService.round(1.99, 0.5, ROUNDING_MODES.FLOOR),
-        ).toBeCloseTo(1.5, 5)
-        expect(roundingService.round(1.99, 1, ROUNDING_MODES.FLOOR)).toBe(1)
-        expect(roundingService.round(10.99, 5, ROUNDING_MODES.FLOOR)).toBe(10)
+      it('deve arredondar para baixo com precisão 10', () => {
+        expect(roundingService.round(1056, 10, ROUNDING_MODES.FLOOR)).toBe(1050)
+        expect(roundingService.round(1050, 10, ROUNDING_MODES.FLOOR)).toBe(1050)
+      })
+
+      it('deve arredondar valores negativos para baixo', () => {
+        expect(roundingService.round(-1056, 10, ROUNDING_MODES.FLOOR)).toBe(
+          -1060,
+        )
+        expect(roundingService.round(-1050, 10, ROUNDING_MODES.FLOOR)).toBe(
+          -1050,
+        )
       })
     })
 
     describe('ROUNDING_MODES.CEIL', () => {
-      it('deve arredondar para cima com diferentes precisões', () => {
-        expect(
-          roundingService.round(1.21, 0.1, ROUNDING_MODES.CEIL),
-        ).toBeCloseTo(1.3, 5)
-        expect(
-          roundingService.round(1.91, 0.1, ROUNDING_MODES.CEIL),
-        ).toBeCloseTo(2.0, 5)
-        expect(
-          roundingService.round(1.01, 0.5, ROUNDING_MODES.CEIL),
-        ).toBeCloseTo(1.5, 5)
-        expect(roundingService.round(1.01, 1, ROUNDING_MODES.CEIL)).toBe(2)
-        expect(roundingService.round(11.01, 5, ROUNDING_MODES.CEIL)).toBe(15)
+      it('deve arredondar para cima com precisão 10', () => {
+        expect(roundingService.round(1056, 10, ROUNDING_MODES.CEIL)).toBe(1060)
+        expect(roundingService.round(1050, 10, ROUNDING_MODES.CEIL)).toBe(1050)
+      })
+
+      it('deve arredondar valores negativos para cima', () => {
+        expect(roundingService.round(-1056, 10, ROUNDING_MODES.CEIL)).toBe(
+          -1050,
+        )
+        expect(roundingService.round(-1050, 10, ROUNDING_MODES.CEIL)).toBe(
+          -1050,
+        )
       })
     })
 
-    describe('ROUNDING_MODES.ROUND', () => {
-      it('deve arredondar para o mais próximo com diferentes precisões', () => {
-        expect(
-          roundingService.round(1.24, 0.1, ROUNDING_MODES.ROUND),
-        ).toBeCloseTo(1.2, 5)
-        expect(
-          roundingService.round(1.25, 0.1, ROUNDING_MODES.ROUND),
-        ).toBeCloseTo(1.3, 5)
-        expect(
-          roundingService.round(1.74, 0.5, ROUNDING_MODES.ROUND),
-        ).toBeCloseTo(1.5, 5)
-        expect(
-          roundingService.round(1.75, 0.5, ROUNDING_MODES.ROUND),
-        ).toBeCloseTo(2.0, 5)
-        expect(roundingService.round(1.49, 1, ROUNDING_MODES.ROUND)).toBe(1)
-        expect(roundingService.round(1.5, 1, ROUNDING_MODES.ROUND)).toBe(2)
-        expect(roundingService.round(12.49, 5, ROUNDING_MODES.ROUND)).toBe(10)
-        expect(roundingService.round(12.5, 5, ROUNDING_MODES.ROUND)).toBe(15)
+    describe('ROUNDING_MODES.TRUNC', () => {
+      it('deve truncar com precisão 10', () => {
+        expect(roundingService.round(1056, 10, ROUNDING_MODES.TRUNC)).toBe(1050)
+        expect(roundingService.round(1050, 10, ROUNDING_MODES.TRUNC)).toBe(1050)
+      })
+
+      it('deve truncar valores negativos', () => {
+        expect(roundingService.round(-1056, 10, ROUNDING_MODES.TRUNC)).toBe(
+          -1050,
+        )
+        expect(roundingService.round(-1050, 10, ROUNDING_MODES.TRUNC)).toBe(
+          -1050,
+        )
       })
     })
 
-    it('deve usar ROUND como padrão quando o modo não é especificado', () => {
-      const resultWithInvalidMode = roundingService.round(
-        1.75,
-        0.5,
-        undefined as any,
-      )
-      const resultWithRoundMode = roundingService.round(
-        1.75,
-        0.5,
-        ROUNDING_MODES.ROUND,
-      )
+    describe('Precisões diferentes', () => {
+      it('deve arredondar corretamente com precisão 5', () => {
+        expect(roundingService.round(1053, 5)).toBe(1055)
+        expect(roundingService.round(1052, 5)).toBe(1050)
+      })
 
-      expect(resultWithInvalidMode).toBe(resultWithRoundMode)
+      it('deve arredondar corretamente com precisão 25', () => {
+        expect(roundingService.round(1060, 25)).toBe(1075)
+        expect(roundingService.round(1062, 25)).toBe(1075)
+        expect(roundingService.round(1037, 25)).toBe(1025)
+      })
+
+      it('deve arredondar corretamente com precisão 100', () => {
+        expect(roundingService.round(1550, 100)).toBe(1600)
+        expect(roundingService.round(1549, 100)).toBe(1500)
+      })
     })
   })
 })

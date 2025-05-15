@@ -16,22 +16,29 @@ export class RoundingService implements IRoundingService {
    *
    * @param cents - O valor em centavos a ser arredondado
    * @param precision - A precisão do arredondamento (padrão: 1)
-   * @param mode - O modo de arredondamento a ser utilizado (padrão: ROUND)
+   * @param mode - O modo de arredondamento a ser utilizado (padrão: "round")
    * @returns O valor arredondado em centavos
    *
    * @example
    * // Arredondar 1056 centavos (10.56) para a próxima dezena (10.60)
    * RoundingService.instance.round(1056, 10, ROUNDING_MODES.CEIL); // Retorna 1060
+   *
+   * @example
+   * // Arredondar 1056 centavos (10.56) para baixo com precisão 10 (10.50)
+   * RoundingService.instance.round(1056, 10, ROUNDING_MODES.FLOOR); // Retorna 1050
    */
   public round(
     cents: number,
     precision: number = 1,
     mode: RoundingModes = ROUNDING_MODES.ROUND,
   ): number {
-    if (precision <= 0) throw new Error('A precisão deve ser um número positivo')
+    if (precision <= 0)
+      throw new Error('A precisão deve ser um número positivo')
 
-   // Se a precisão for 1, não há arredondamento a ser feito
-    if (precision === 1) return cents
+    // Se a precisão for 1, não há arredondamento a ser feito
+    if (cents === 0 || (precision === 1 && Number.isInteger(cents))) {
+      return cents
+    }
 
     const isNegative = cents < 0
     const absoluteCents = Math.abs(cents)
