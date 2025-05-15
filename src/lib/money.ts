@@ -412,7 +412,7 @@ export class Money implements IMoney {
    */
   public round(
     precision?: number,
-    mode?: RoundingModes,
+    mode: RoundingModes = ROUNDING_MODES.ROUND,
   ): Money {
     const roundedCents = this.rounder.round(this._cents, precision, mode)
     if (roundedCents === this._cents) return this.clone()
@@ -510,19 +510,16 @@ export class Money implements IMoney {
    */
   public allocate(numberOfParts: number): Money[] {
     if (!Number.isInteger(numberOfParts) || numberOfParts <= 0) {
-      throw new Error('O número de partes deve ser um inteiro positivo')
+      throw new Error('O número de parcelas deve ser um inteiro positivo.')
     }
 
-    const result: Money[] = []
     const base = Math.floor(this._cents / numberOfParts)
     const remainder = this._cents % numberOfParts
 
-    for (let i = 0; i < numberOfParts; i++) {
+    return Array.from({ length: numberOfParts }, (_, i) => {
       const amount = base + (i < remainder ? 1 : 0)
-      result.push(Money.fromCents(amount, this.formatOptions))
-    }
-
-    return result
+      return Money.fromCents(amount, this.formatOptions)
+    })
   }
 
   /**
