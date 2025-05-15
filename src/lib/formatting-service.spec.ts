@@ -34,7 +34,7 @@ describe('FormattingService', () => {
       })
 
       // Formato para BRL: R$ 1.234,56
-      expect(result).toMatch(/R\$\s*1.234,56/)
+      expect(result).toMatch(/R\$\s1\.234,56/)
     })
 
     it('deve ocultar o símbolo da moeda quando showSymbol é false', () => {
@@ -64,7 +64,7 @@ describe('FormattingService', () => {
       })
 
       // Formato alemão para EUR: 1.234,56 €
-      expect(result).toMatch(/1.234,56\s*€/)
+      expect(result).toMatch(/1\.234,56\s\€/)
     })
 
     it('deve lançar erro quando o valor é nulo', () => {
