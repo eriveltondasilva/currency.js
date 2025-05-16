@@ -32,13 +32,11 @@ export class RoundingService implements IRoundingService {
     precision: number = 1,
     mode: RoundingModes = ROUNDING_MODES.ROUND,
   ): number {
-    if (precision <= 0)
+    if (!Number.isFinite(precision) || precision <= 0) {
       throw new Error('A precisão deve ser um número positivo')
-
-    // Se a precisão for 1, não há arredondamento a ser feito
-    if (cents === 0 || (precision === 1 && Number.isInteger(cents))) {
-      return cents
     }
+
+    if (precision === 1 || cents === 0) return cents
 
     const isNegative = cents < 0
     const absoluteCents = Math.abs(cents)
