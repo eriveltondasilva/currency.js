@@ -35,8 +35,10 @@ export class Money implements IMoney {
    * // Diferentes formas de criar instâncias Money
    * const a = new Money(10.50);
    * const b = new Money("10.50");
-   * const c = new Money(a);
-   * const d = new Money(1050, { currencyCode: 'BRL' });
+   * const c = new Money("10,50");
+   * const d = new Money("R$ 10,50");
+   * const e = new Money(a);
+   * const f = new Money(1050, { currencyCode: 'BRL' });
    */
   constructor(value: MoneyInput = 0, options: FormatOptions = {}) {
     this.converter = ConversionService.instance
@@ -58,7 +60,11 @@ export class Money implements IMoney {
    * // Criar Money a partir de 1050 centavos (equivalente a 10.50)
    * const money = Money.fromCents(1050, { currencyCode: 'BRL' });
    */
-  public static fromCents(value: number, options: FormatOptions): Money {
+  public static fromCents(value: number, options: FormatOptions = {}): Money {
+    if (!Number.isFinite(value)) {
+      throw new Error('O valor em centavos deve ser um número finito')
+    }
+
     const currency = new Money(0, options)
     currency.cents = value
     return currency
@@ -411,11 +417,19 @@ export class Money implements IMoney {
    * console.log(rounded.value); // 10.6
    */
   public round(
-    precision?: number,
+    precision: number = 1,
     mode: RoundingModes = ROUNDING_MODES.ROUND,
   ): Money {
+    if (precision <= 0) {
+      throw new Error('A precisão deve ser um número positivo')
+    }
+
+    if (precision === 1) return this.clone()
+
     const roundedCents = this.rounder.round(this._cents, precision, mode)
+
     if (roundedCents === this._cents) return this.clone()
+
     return Money.fromCents(roundedCents, this.formatOptions)
   }
 
@@ -433,6 +447,7 @@ export class Money implements IMoney {
   public plus(value: MoneyInput): Money {
     const valueCents = this.converter.toCents(value)
     if (valueCents === 0) return this.clone()
+
     return Money.fromCents(this.cents + valueCents, this.formatOptions)
   }
 
@@ -450,6 +465,7 @@ export class Money implements IMoney {
   public minus(value: MoneyInput): Money {
     const valueCents = this.converter.toCents(value)
     if (valueCents === 0) return this.clone()
+
     return Money.fromCents(this.cents - valueCents, this.formatOptions)
   }
 
@@ -466,8 +482,12 @@ export class Money implements IMoney {
    * console.log(doubled.value); // 21.0
    */
   public times(factor: number): Money {
-    if (factor <= 0)
-      throw new Error('O fator de multiplicação deve ser positivo.')
+   if (factor < 0) {
+      throw new Error('O fator de multiplicação não pode ser negativo.')
+    }
+    
+    if (factor === 0) return Money.zero(this.formatOptions)
+
     if (factor === 1) return this.clone()
 
     return Money.fromCents(this._cents * factor, this.formatOptions)
@@ -489,7 +509,9 @@ export class Money implements IMoney {
     if (divisor <= 0) {
       throw new Error('Não é possível dividir por zero ou negativo.')
     }
+
     if (divisor === 1) return this.clone()
+
     return Money.fromCents(this._cents / divisor, this.formatOptions)
   }
 
@@ -511,6 +533,10 @@ export class Money implements IMoney {
   public allocate(numberOfParts: number): Money[] {
     if (!Number.isInteger(numberOfParts) || numberOfParts <= 0) {
       throw new Error('O número de parcelas deve ser um inteiro positivo.')
+    }
+
+    if (this.isZero) {
+      return Array(numberOfParts).fill(Money.zero(this.formatOptions))
     }
 
     const base = Math.floor(this._cents / numberOfParts)
@@ -538,9 +564,11 @@ export class Money implements IMoney {
     if (discount <= 0) {
       throw new Error('O percentual de desconto não pode ser zero ou negativo.')
     }
+
     if (discount > 100) {
       throw new Error('O percentual de desconto não pode ser maior que 100%.')
     }
+
     return this.minus(this.percentage(discount))
   }
 
@@ -562,6 +590,7 @@ export class Money implements IMoney {
         'O percentual de acréscimo não pode ser zero ou negativo.',
       )
     }
+
     return this.plus(this.percentage(surcharge))
   }
 
@@ -581,6 +610,9 @@ export class Money implements IMoney {
     if (percentage <= 0) {
       throw new Error('A porcentagem não pode ser zero ou negativo.')
     }
+
+    if (percentage === 100) return this.clone()
+
     return this.times(percentage / 100)
   }
 }
