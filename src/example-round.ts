@@ -1,16 +1,14 @@
-import { RoundingService } from './lib/rounding-service.ts'
+import { Money, ROUNDING_MODES } from './index.ts'
 
-const rounder = RoundingService.instance
-const cents = 1056
+const money = Money(10.7)
 
-// .round(1056, 10, ROUNDING_MODES.ROUND)
-console.log('round 5:', rounder.round(cents, 5))
-console.log('round 10:', rounder.round(cents, 10))
-console.log('round 15:', rounder.round(cents, 15))
-console.log('round 20:', rounder.round(cents, 20))
-console.log('round 25:', rounder.round(cents, 25))
-console.log('round 30:', rounder.round(cents, 30))
-console.log('round 50:', rounder.round(cents, 50))
-console.log('round 60:', rounder.round(cents, 60))
-console.log('round 75:', rounder.round(cents, 75))
-console.log('round 100:', rounder.round(cents, 100))
+console.log('round 25:\t', money.round(25).value)
+console.log('ceil 25:\t', money.round(25, ROUNDING_MODES.CEIL).value)
+console.log('floor 25:\t', money.round(25, ROUNDING_MODES.FLOOR).value)
+console.log('trunc 25:\t', money.round(25, ROUNDING_MODES.TRUNC).value)
+
+// Output:
+// round 5: 10.55
+// round 10: 10.60
+// round 50: 10.50
+// round 100: 11.00

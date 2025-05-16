@@ -408,12 +408,12 @@ export class Money implements IMoney {
    * Arredonda o valor monetário com a precisão e modo especificados.
    *
    * @param precision - Precisão do arredondamento (padrão: 1)
-   * @param mode - Modo de arredondamento (padrão: ROUND)
+   * @param mode - Modo de arredondamento (padrão: 'round')
    * @returns Nova instância de Money com o valor arredondado
    *
    * @example
    * const price = new Money(10.56);
-   * const rounded = price.round(1, ROUNDING_MODES.CEIL);
+   * const rounded = price.round(10);
    * console.log(rounded.value); // 10.6
    */
   public round(
@@ -485,7 +485,7 @@ export class Money implements IMoney {
    if (factor < 0) {
       throw new Error('O fator de multiplicação não pode ser negativo.')
     }
-    
+
     if (factor === 0) return Money.zero(this.formatOptions)
 
     if (factor === 1) return this.clone()

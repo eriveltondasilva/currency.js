@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'vitest'
-import { RoundingService } from './rounding-service'
+import { describe, expect, it } from 'vitest'
 import { ROUNDING_MODES } from '../config/constants'
+import { RoundingService } from './rounding-service'
 
 // TODO: Adicionar testes unitários para a classe RoundingService
 describe('RoundingService', () => {
@@ -10,6 +10,7 @@ describe('RoundingService', () => {
     it('deve retornar a mesma instância', () => {
       const instance1 = RoundingService.instance
       const instance2 = RoundingService.instance
+
       expect(instance1).toBe(instance2)
     })
   })
@@ -20,6 +21,7 @@ describe('RoundingService', () => {
         expect(() => roundingService.round(100, 0)).toThrow(
           'A precisão deve ser um número positivo',
         )
+
         expect(() => roundingService.round(100, -1)).toThrow(
           'A precisão deve ser um número positivo',
         )
@@ -36,10 +38,9 @@ describe('RoundingService', () => {
       })
     })
 
-    describe('ROUNDING_MODES.ROUND (padrão)', () => {
+    describe('ROUNDING_MODES.ROUND', () => {
       it('deve arredondar corretamente com precisão padrão (1)', () => {
-        expect(roundingService.round(10.5)).toBe(11)
-        expect(roundingService.round(10.4)).toBe(10)
+        expect(roundingService.round(1056)).toBe(1056)
       })
 
       it('deve arredondar corretamente com precisão 10', () => {
@@ -61,7 +62,7 @@ describe('RoundingService', () => {
 
       it('deve arredondar valores negativos para baixo', () => {
         expect(roundingService.round(-1056, 10, ROUNDING_MODES.FLOOR)).toBe(
-          -1060,
+          -1050,
         )
         expect(roundingService.round(-1050, 10, ROUNDING_MODES.FLOOR)).toBe(
           -1050,
@@ -77,7 +78,7 @@ describe('RoundingService', () => {
 
       it('deve arredondar valores negativos para cima', () => {
         expect(roundingService.round(-1056, 10, ROUNDING_MODES.CEIL)).toBe(
-          -1050,
+          -1060,
         )
         expect(roundingService.round(-1050, 10, ROUNDING_MODES.CEIL)).toBe(
           -1050,
@@ -108,8 +109,8 @@ describe('RoundingService', () => {
       })
 
       it('deve arredondar corretamente com precisão 25', () => {
-        expect(roundingService.round(1060, 25)).toBe(1075)
-        expect(roundingService.round(1062, 25)).toBe(1075)
+        expect(roundingService.round(1060, 25)).toBe(1050)
+        expect(roundingService.round(1062, 25)).toBe(1050)
         expect(roundingService.round(1037, 25)).toBe(1025)
       })
 

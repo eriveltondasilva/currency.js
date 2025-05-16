@@ -7,7 +7,7 @@
  * @version 0.0.1
  */
 
-import {ROUNDING_MODES, Money, Calculator } from './index.ts'
+import { Calculator, Money, ROUNDING_MODES } from './index.ts'
 
 //# Demonstração das funcionalidades da biblioteca
 
@@ -93,11 +93,13 @@ installments.forEach((inst, index) => {
 // Parcela 2: R$ 33,33
 // Parcela 3: R$ 33,33
 
+const money = Money(10.56)
 
-
-const money = Money(10.56);
-
-console.log(money.round(0.2, ROUNDING_MODES.ROUND).format());  // 10.6 (standard rounding)
-console.log(money.round(0.2, ROUNDING_MODES.FLOOR).value);  // 10.5 (round down)
-console.log(money.round(0.2, ROUNDING_MODES.CEIL).value);   // 10.6 (round up)
+console.log(money.round(0.2, ROUNDING_MODES.ROUND).format()) // 10.6 (standard rounding)
+console.log(money.round(0.2, ROUNDING_MODES.FLOOR).value) // 10.5 (round down)
+console.log(money.round(0.2, ROUNDING_MODES.CEIL).value) // 10.6 (round up)
 // money.round(1, ROUNDING_MODES.TRUNC);  // 10.5 (truncate)
+console.log()
+
+const division = Money(11.0).dividedBy(3)
+console.log('Divisão:', division.format()) // 3.67
