@@ -54,7 +54,7 @@ console.log(
 // Basic usage
 const a = Money(10.50);       // From number
 const b = Money("10.50");     // From string
-const c = Money("10,50");     // From string with comma
+const c = Money("10,50");     // From string with comma (Brazilian format)
 const d = Money("R$ 10,50");  // From string with currency symbol
 const e = Money(a);           // From another Money instance
 
@@ -66,18 +66,14 @@ const f = Money(1050, {
 }); // R$ 10,50
 
 // Configure with defaults
-const BRL = Money.configure({ currencyCode: 'BRL' });
+const BRL = Money.setConfigure({ currencyCode: 'BRL' });
 const price = BRL(25.50);  // R$ 25,50
 
 // Predefined currencies
-import { USD, EUR, BRL } from '@eriveltonsilva/currency.js';
-const usd = USD(99.99);  // $99.99
-const eur = EUR(99.99);  // 99.99 €
-const brl = BRL(99.99);  // R$ 99,99
-
-// Static methods
-const zero      = Money.zero();               // 0.00
-const fromCents = Money.fromCents(1050, {});  // 10.50
+import { Currency } from '@eriveltonsilva/currency.js';
+const usd = Currency.USD(99.99);  // $99.99
+const eur = Currency.EUR(99.99);  // 99.99 €
+const brl = Currency.BRL(99.99);  // R$ 99,99
 ```
 
 ### Properties
@@ -153,7 +149,7 @@ const absolute = price.absolute() // 10.56
 const negative = Money(50).negate() // -50
 const maximum = price.max(Money(15)) // 15
 const minimum = price.min(Money(5)) // -10.56
-const rounded = price.round(1) // -10.6 (rounded to 1 decimal place)
+const rounded = price.round(10) // -10.6 (rounded to 1 decimal place)
 ```
 
 ### Business Operations
@@ -236,10 +232,10 @@ import { Money, ROUNDING_MODES } from '@eriveltonsilva/currency.js'
 
 const price = Money(10.56)
 
-price.round(1, ROUNDING_MODES.ROUND) // 10.6 (standard rounding)
-price.round(1, ROUNDING_MODES.FLOOR) // 10.5 (round down)
-price.round(1, ROUNDING_MODES.CEIL) // 10.6 (round up)
-price.round(1, ROUNDING_MODES.TRUNC) // 10.5 (truncate)
+price.round(10, ROUNDING_MODES.ROUND) // 10.6 (standard rounding)
+price.round(10, ROUNDING_MODES.FLOOR) // 10.5 (round down)
+price.round(10, ROUNDING_MODES.CEIL) // 10.6 (round up)
+price.round(10, ROUNDING_MODES.TRUNC) // 10.5 (truncate)
 ```
 
 ## Best Practices

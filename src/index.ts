@@ -7,7 +7,7 @@ import type { FormatOptions, MoneyInput } from './types.ts'
 function createMoneyFactory(defaultOptions: FormatOptions = {}) {
   const factory = (value: MoneyInput = 0) => new MoneyLib(value, defaultOptions)
 
-  factory.configure = (options: FormatOptions) =>
+  factory.setConfigure = (options: FormatOptions) =>
     createMoneyFactory({ ...defaultOptions, ...options })
 
   return factory
@@ -16,10 +16,12 @@ function createMoneyFactory(defaultOptions: FormatOptions = {}) {
 const Money = createMoneyFactory()
 const Calculator = CalculationService.instance
 
-export const USD = Money.configure({ currencyCode: 'USD' })
-export const EUR = Money.configure({ currencyCode: 'EUR' })
-export const BRL = Money.configure({ currencyCode: 'BRL' })
+const Currency = {
+  USD: Money.setConfigure({ currencyCode: 'USD' }),
+  EUR: Money.setConfigure({ currencyCode: 'EUR' }),
+  BRL: Money.setConfigure({ currencyCode: 'BRL' }),
+}
 
-export { Calculator, Money, ROUNDING_MODES }
+export { Calculator, Currency, Money, ROUNDING_MODES }
 export type { FormatOptions, MoneyInput }
 export default Money
