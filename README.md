@@ -1,27 +1,55 @@
 # @eriveltonsilva/currency.js - Currency Manipulation Library
 
-A lightweight, robust JavaScript library for currency operations with precision and reliability. Designed to handle monetary values safely, avoiding floating point issues common in financial calculations.
-
 ![npm](https://img.shields.io/npm/v/@eriveltonsilva/currency.js)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Node](https://img.shields.io/badge/node-%3E%3D22-brightgreen)
 
-## Features
+A lightweight, robust JavaScript library for currency operations with precision and reliability. Designed to handle monetary values safely, avoiding floating point issues common in financial calculations.
 
-- ✅ **Safe arithmetic operations**: Addition, subtraction, multiplication, division
-- ✅ **Precise calculations**: Based on integer cents to avoid floating-point errors
-- ✅ **Currency formatting**: Configurable formatting with internationalization support
-- ✅ **Money comparison**: Easy value comparison with expressive methods
-- ✅ **Business operations**: Discount, surcharge, percentage calculations
-- ✅ **Payment helpers**: Installment distribution, subtotals, average calculations
+## Table of Contents
 
-## Installation
+- [@eriveltonsilva/currency.js - Currency Manipulation Library](#eriveltonsilvacurrencyjs---currency-manipulation-library)
+  - [Table of Contents](#table-of-contents)
+  - [🚀 Features](#-features)
+  - [📦 Installation](#-installation)
+  - [🔍 Basic Usage](#-basic-usage)
+  - [📚 API Documentation](#-api-documentation)
+    - [Creating Money Instances](#creating-money-instances)
+    - [Properties](#properties)
+    - [Formatting](#formatting)
+    - [Comparison Methods](#comparison-methods)
+    - [Arithmetic Operations](#arithmetic-operations)
+    - [Transformation Methods](#transformation-methods)
+    - [Business Operations](#business-operations)
+    - [Calculator API](#calculator-api)
+  - [🌎 Internationalization](#-internationalization)
+  - [🔄 Rounding Methods](#-rounding-methods)
+  - [💡 Best Practices](#-best-practices)
+    - [Avoid Floating Point Arithmetic](#avoid-floating-point-arithmetic)
+    - [Chain Operations for Readability](#chain-operations-for-readability)
+    - [Immutability](#immutability)
+  - [🧪 Running Tests](#-running-tests)
+  - [🤝 Contributing](#-contributing)
+  - [📄 License](#-license)
+  - [🔗 Useful Links](#-useful-links)
+
+## 🚀 Features
+
+- **Safe arithmetic operations**: Addition, subtraction, multiplication, division
+- **Precise calculations**: Based on integer cents to avoid floating-point errors
+- **Currency formatting**: Configurable formatting with internationalization support
+- **Money comparison**: Easy value comparison with expressive methods
+- **Business operations**: Discount, surcharge, percentage calculations
+- **Payment helpers**: Installment distribution, subtotals, average calculations
+
+## 📦 Installation
 
 ```bash
 # npm
 npm install @eriveltonsilva/currency.js
 ```
 
-## Basic Usage
+## 🔍 Basic Usage
 
 ```javascript
 import Money from '@eriveltonsilva/currency.js'
@@ -46,7 +74,7 @@ console.log(
 ) // 14,99 €
 ```
 
-## API Documentation
+## 📚 API Documentation
 
 ### Creating Money Instances
 
@@ -55,22 +83,24 @@ console.log(
 const a = Money(10.50);       // From number
 const b = Money("10.50");     // From string
 const c = Money("10,50");     // From string with comma (Brazilian format)
-const d = Money("R$ 10,50");  // From string with currency symbol
-const e = Money(a);           // From another Money instance
+const d = Money("$10.50");    // From string with currency symbol
+const e = Money("R$ 10,50");  // From string with currency symbol (Brazilian format)
+const f = Money(a);           // From another Money instance
 
 // With options
-const f = Money(1050, {
+const g = Money(10.50, {
   currencyCode: 'BRL',
   locale: 'pt-BR'
   showSymbol: true,
 }); // R$ 10,50
 
 // Configure with defaults
-const BRL = Money.setConfigure({ currencyCode: 'BRL' });
+const BRL = Money.configure({ currencyCode: 'BRL' });
 const price = BRL(25.50);  // R$ 25,50
 
 // Predefined currencies
 import { Currency } from '@eriveltonsilva/currency.js';
+
 const usd = Currency.USD(99.99);  // $99.99
 const eur = Currency.EUR(99.99);  // 99.99 €
 const brl = Currency.BRL(99.99);  // R$ 99,99
@@ -163,7 +193,7 @@ const discounted = price.applyDiscount(20) // 80 (20% off)
 const increased = price.applySurcharge(15) // 115 (15% added)
 
 // Distribution
-const parts = price.allocate(3) // [33.34, 33.33, 33.33]
+const parts = price.allocate(3) // [Money(33.34), Money(33.33), Money(33.33)]
 ```
 
 ### Calculator API
@@ -174,7 +204,7 @@ For more complex operations, you can use the Calculator API:
 import { Calculator } from '@eriveltonsilva/currency.js'
 
 // Configure calculator
-Calculator.setConfigure({
+Calculator.configure({
   currencyCode: 'USD',
   showSymbol: true,
 })
@@ -188,7 +218,7 @@ const percentage = Calculator.percentage(100, 15) // $15.00
 
 // Business operations
 const installments = Calculator.distributeInstallments(100, 3)
-// [$33.34, $33.33, $33.33]
+// [Money(33.34), Money(33.33), Money(33.33)]
 
 // Shopping cart calculations
 const items = [
@@ -202,7 +232,7 @@ const total = Calculator.calculateTotal(items) // $97.75
 const average = Calculator.calculateAveragePrice(items) // $15.42
 ```
 
-## Internationalization
+## 🌎 Internationalization
 
 Currency.js supports various currency codes and locales for formatting:
 
@@ -223,7 +253,7 @@ amount.format({
 })
 ```
 
-## Rounding Methods
+## 🔄 Rounding Methods
 
 The library supports different rounding modes:
 
@@ -238,7 +268,7 @@ price.round(10, ROUNDING_MODES.CEIL) // 10.6 (round up)
 price.round(10, ROUNDING_MODES.TRUNC) // 10.5 (truncate)
 ```
 
-## Best Practices
+## 💡 Best Practices
 
 ### Avoid Floating Point Arithmetic
 
@@ -262,7 +292,7 @@ const finalPrice = Money(100)
   .applyDiscount(10) // Apply 10% discount
   .applySurcharge(5) // Add 5% fee
   .times(2) // Double the amount
-  .round(2) // Round to 2 decimal places
+  .round(20) // Round to 2 decimal places
 ```
 
 ### Immutability
@@ -277,14 +307,14 @@ console.log(original.value) // Still 100
 console.log(discounted.value) // 90
 ```
 
-## Running Tests
+## 🧪 Running Tests
 
 ```bash
 # Run the test suite
 npm test
 ```
 
-## Contributing
+## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
@@ -296,6 +326,12 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 Please make sure to update tests as appropriate.
 
-## License
+## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🔗 Useful Links
+
+- [GitHub Repository](https://github.com/eriveltondasilva/currency.js)
+- [Report Issues](https://github.com/eriveltondasilva/currency.js/issues)
+- [Complete Documentation](https://github.com/eriveltondasilva/currency.js#readme)
