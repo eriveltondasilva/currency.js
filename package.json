@@ -8,6 +8,10 @@
     "money",
     "money.js",
     "finance",
+    "rounding",
+    "decimal",
+    "precision",
+    "format",
     "monetary"
   ],
   "license": "MIT",
@@ -38,10 +42,15 @@
     "email": "eriveltondasilva13@gmail.com"
   },
   "files": [
-    "./dist"
+    "./dist",
+    "LICENSE",
+    "README.md"
   ],
   "contributors": [],
   "prettier": "@eriveltonsilva/prettier-config",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup",
     "prepublishOnly": "npm run test && npm run build",
