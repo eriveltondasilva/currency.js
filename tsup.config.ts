@@ -9,6 +9,7 @@ const banner = `
  * @license ${packageJson.license}
  * @copyright ${new Date().getFullYear()} ${packageJson.author}
  * @see ${packageJson.homepage}
+ * @see ${packageJson.repository}
  */`
 
 export default defineConfig({
