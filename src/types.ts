@@ -61,6 +61,7 @@ interface IMoneyProperties {
   isZero: boolean
   isPositive: boolean
   isNegative: boolean
+  formatOptions: FormatOptions
 }
 
 interface IMoneyConversion {

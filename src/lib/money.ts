@@ -23,7 +23,7 @@ export class Money implements IMoney {
   private readonly converter: ConversionService
   private readonly formatter: FormattingService
   private readonly rounder: RoundingService
-  private readonly formatOptions: FormatOptions
+  private readonly options: FormatOptions
 
   /**
    * Cria uma nova instância de Money.
@@ -45,7 +45,7 @@ export class Money implements IMoney {
     this.converter = ConversionService.instance
     this.formatter = FormattingService.instance
     this.rounder = RoundingService.instance
-    this.formatOptions = { ...options }
+    this.options = { ...options }
 
     this._cents = !value ? 0 : this.converter.toCents(value)
   }
@@ -137,6 +137,18 @@ export class Money implements IMoney {
   }
 
   /**
+   * Obtém as opções de formatação.
+   * @returns formatOptions
+   *
+   * @example
+   * const money = new Money(10.50);
+   * console.log(money.formatOptions); // { currencyCode: 'USD', locale: 'en-US' }
+   */
+  public get formatOptions(): FormatOptions {
+    return this.options || {}
+  }
+
+  /**
    * Verifica se o valor monetário é zero.
    *
    * @returns true se o valor for zero, false caso contrário
@@ -185,7 +197,7 @@ export class Money implements IMoney {
    * const copy = original.clone();
    */
   public clone(): Money {
-    return Money.fromCents(this._cents, this.formatOptions)
+    return Money.fromCents(this._cents, this.options)
   }
 
   /**
@@ -200,7 +212,7 @@ export class Money implements IMoney {
    * console.log(price.format({ currencyCode: 'USD', locale: 'en-US' })); // $1,234.56
    */
   public format(options: FormatOptions = {}): string {
-    const mergedOptions = { ...this.formatOptions, ...options }
+    const mergedOptions = { ...this.options, ...options }
     return this.formatter.format(this, mergedOptions)
   }
 
@@ -339,7 +351,7 @@ export class Money implements IMoney {
    */
   public absolute(): Money {
     if (this.isPositive || this.isZero) return this.clone()
-    return Money.fromCents(Math.abs(this._cents), this.formatOptions)
+    return Money.fromCents(Math.abs(this._cents), this.options)
   }
 
   /**
@@ -358,7 +370,7 @@ export class Money implements IMoney {
     const otherCents = this.converter.toCents(value)
     return this._cents >= otherCents ?
         this.clone()
-      : Money.fromCents(otherCents, this.formatOptions)
+      : Money.fromCents(otherCents, this.options)
   }
 
   /**
@@ -377,7 +389,7 @@ export class Money implements IMoney {
     const otherCents = this.converter.toCents(value)
     return this._cents <= otherCents ?
         this.clone()
-      : Money.fromCents(otherCents, this.formatOptions)
+      : Money.fromCents(otherCents, this.options)
   }
 
   /**
@@ -393,7 +405,7 @@ export class Money implements IMoney {
   public negate(): Money {
     return this.isZero ?
         this.clone()
-      : Money.fromCents(-this._cents, this.formatOptions)
+      : Money.fromCents(-this._cents, this.options)
   }
 
   /**
@@ -422,7 +434,7 @@ export class Money implements IMoney {
 
     return roundedCents === this._cents ?
         this.clone()
-      : Money.fromCents(roundedCents, this.formatOptions)
+      : Money.fromCents(roundedCents, this.options)
   }
 
   /**
@@ -440,7 +452,7 @@ export class Money implements IMoney {
     const valueCents = this.converter.toCents(value)
     return valueCents === 0 ?
         this.clone()
-      : Money.fromCents(this.cents + valueCents, this.formatOptions)
+      : Money.fromCents(this.cents + valueCents, this.options)
   }
 
   /**
@@ -458,7 +470,7 @@ export class Money implements IMoney {
     const valueCents = this.converter.toCents(value)
     return valueCents === 0 ?
         this.clone()
-      : Money.fromCents(this.cents - valueCents, this.formatOptions)
+      : Money.fromCents(this.cents - valueCents, this.options)
   }
 
   /**
@@ -478,10 +490,10 @@ export class Money implements IMoney {
       throw new Error('O fator de multiplicação não pode ser negativo.')
     }
 
-    if (factor === 0) return Money.zero(this.formatOptions)
+    if (factor === 0) return Money.zero(this.options)
     if (factor === 1) return this.clone()
 
-    return Money.fromCents(this._cents * factor, this.formatOptions)
+    return Money.fromCents(this._cents * factor, this.options)
   }
 
   /**
@@ -503,7 +515,7 @@ export class Money implements IMoney {
 
     if (divisor === 1) return this.clone()
 
-    return Money.fromCents(this._cents / divisor, this.formatOptions)
+    return Money.fromCents(this._cents / divisor, this.options)
   }
 
   /**
@@ -527,7 +539,7 @@ export class Money implements IMoney {
     }
 
     if (this.isZero) {
-      return Array(numberOfParts).fill(Money.zero(this.formatOptions))
+      return Array(numberOfParts).fill(Money.zero(this.options))
     }
 
     const base = Math.floor(this._cents / numberOfParts)
@@ -535,7 +547,7 @@ export class Money implements IMoney {
 
     return Array.from({ length: numberOfParts }, (_, i) => {
       const amount = base + (i < remainder ? 1 : 0)
-      return Money.fromCents(amount, this.formatOptions)
+      return Money.fromCents(amount, this.options)
     })
   }
 
