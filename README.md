@@ -14,6 +14,7 @@ A lightweight, robust JavaScript library for currency operations with precision 
   - [📦 Installation](#-installation)
   - [🔍 Basic Usage](#-basic-usage)
   - [📚 API Documentation](#-api-documentation)
+    - [Library Exports](#library-exports)
     - [Creating Money Instances](#creating-money-instances)
     - [Properties](#properties)
     - [Formatting](#formatting)
@@ -75,6 +76,30 @@ console.log(
 ```
 
 ## 📚 API Documentation
+
+### Library Exports
+
+The `@eriveltonsilva/currency.js` library offers several exports for use in your project:
+
+```javascript
+// Default import - Money function
+import Money from '@eriveltonsilva/currency.js';
+
+// Named imports
+import {
+  Money,          // Money function (alternative to default import)
+  Calculator,     // Calculator API for complex operations
+  Currency,       // Pre-configured currencies (USD, EUR, BRL)
+  ROUNDING_MODES  // Constants for rounding modes
+} from '@eriveltonsilva/currency.js';
+
+// Type imports (for TypeScript)
+import type {
+  FormatOptions,  // Formatting options
+  MoneyInput,     // Input types accepted by the Money function
+  RoundingModes   // Types of rounding modes
+} from '@eriveltonsilva/currency.js';
+```
 
 ### Creating Money Instances
 
