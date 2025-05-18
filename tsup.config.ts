@@ -19,6 +19,7 @@ export default defineConfig({
   dts: true,
   sourcemap: true,
   treeshake: true,
+  minify: true,
   outExtension: ({ format }) => ({
     js: format === 'esm' ? '.mjs' : '.cjs',
   }),

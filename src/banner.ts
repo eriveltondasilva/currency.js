@@ -9,3 +9,9 @@
  * @see https://github.com/erivelton/money-ts
  * @see https://www.npmjs.com/package/money-ts
  */
+
+import {Money} from '../dist/index.mjs'
+
+const money = Money(1000)
+
+console.log(money.value)
