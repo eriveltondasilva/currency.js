@@ -8,12 +8,9 @@
     "esm": true,
     "transpileOnly": true,
     "files": true,
-    "require": ["tsconfig-paths/register"]
   },
   "compilerOptions": {
     "importHelpers": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
     //
     "outDir": "./dist",
     "rootDir": "./src",
@@ -24,5 +21,5 @@
     }
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist", "tests", "**/*.spec.ts", "**/*.test.ts"]
+  "exclude": ["node_modules", "dist", "__tests__", "**/*.spec.ts", "**/*.test.ts"]
 }

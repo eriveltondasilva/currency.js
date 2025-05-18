@@ -10,8 +10,8 @@
  * @see https://www.npmjs.com/package/money-ts
  */
 
-import {Money} from '../dist/index.mjs'
+// import {Money} from '../dist/index.mjs'
 
-const money = Money(1000)
+// const money = Money(1000)
 
-console.log(money.value)
+// console.log(money.plus(4).value)
