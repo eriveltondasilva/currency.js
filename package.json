@@ -1,7 +1,7 @@
 {
   "name": "@eriveltonsilva/currency.js",
-  "version": "0.0.3",
-  "description": "Biblioteca especializada para manipulação de valores monetários, evitando problemas de arredondamento com números de ponto flutuante e oferecendo uma API rica para operações financeiras.",
+  "description": "A lightweight and reliable JavaScript library for precise currency operations, built to safely handle monetary values without floating point errors.",
+  "version": "0.0.4",
   "keywords": [
     "currency",
     "currency.js",
@@ -35,7 +35,7 @@
   "homepage": "https://github.com/eriveltondasilva/currency.js#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/eriveltondasilva/currency.js.git"
+    "url": "git+https://github.com/eriveltondasilva/currency.js.git"
   },
   "bugs": {
     "url": "https://github.com/eriveltondasilva/currency.js/issues",
