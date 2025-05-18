@@ -1,4 +1,5 @@
 <!-- omit in toc -->
+
 # 💰 Currency.js — Currency Manipulation Library
 
 ![npm](https://img.shields.io/npm/v/@eriveltonsilva/currency.js)
@@ -15,6 +16,7 @@ A lightweight, robust JavaScript library for currency operations with precision 
 </p>
 
 <!-- omit in toc -->
+
 ## 📋 Table of Contents
 
 - [1. 🚀 Features](#1--features)
@@ -347,97 +349,99 @@ console.log(discounted.value) // 90
 ```javascript
 function processPayment(totalAmount, numberOfInstallments, discount = 0) {
   // Apply discount if available
-  let finalAmount = Money(totalAmount);
+  let finalAmount = Money(totalAmount)
 
   if (discount > 0) {
-    finalAmount = finalAmount.applyDiscount(discount);
-    console.log(`Discount applied: ${finalAmount.format()}`);
+    finalAmount = finalAmount.applyDiscount(discount)
+    console.log(`Discount applied: ${finalAmount.format()}`)
   }
 
   // Calculate installments
-  const installments = finalAmount.allocate(numberOfInstallments);
+  const installments = finalAmount.allocate(numberOfInstallments)
 
-  console.log(`Total amount: ${finalAmount.format()}`);
-  console.log(`Payment in ${numberOfInstallments} installments:`);
+  console.log(`Total amount: ${finalAmount.format()}`)
+  console.log(`Payment in ${numberOfInstallments} installments:`)
 
   installments.forEach((installment, index) => {
-    console.log(`Installment ${index + 1}: ${installment.format()}`);
-  });
+    console.log(`Installment ${index + 1}: ${installment.format()}`)
+  })
 
   return {
     totalAmount: finalAmount,
-    installments
-  };
+    installments,
+  }
 }
 
 // Usage
-const result = processPayment(1299.99, 5, 10);
+const result = processPayment(1299.99, 5, 10)
 ```
 
 **Example 2: Shopping Cart**
 
 ```javascript
 class ShoppingCart {
-  items = [];
+  items = []
 
   addItem(name, price, quantity = 1) {
     this.items.push({
       name: name,
       price: price,
-      quantity: quantity
-    });
+      quantity: quantity,
+    })
   }
 
   removeItem(index) {
     if (index >= 0 && index < this.items.length) {
-      this.items.splice(index, 1);
+      this.items.splice(index, 1)
     }
   }
 
   calculateSubtotals() {
-    return this.items.map(item => ({
+    return this.items.map((item) => ({
       ...item,
-      subtotal: Calculator.calculateSubtotal(item)
-    }));
+      subtotal: Calculator.calculateSubtotal(item),
+    }))
   }
 
   calculateTotal() {
-    return Calculator.calculateTotal(this.items);
+    return Calculator.calculateTotal(this.items)
   }
 
   applyCoupon(discountPercentage) {
-    return this.calculateTotal().applyDiscount(discountPercentage);
+    return this.calculateTotal().applyDiscount(discountPercentage)
   }
 
   summary() {
-    const itemsWithSubtotal = this.calculateSubtotals();
-    const total = this.calculateTotal();
+    const itemsWithSubtotal = this.calculateSubtotals()
+    const total = this.calculateTotal()
 
-    console.log("=== CART SUMMARY ===");
+    console.log('=== CART SUMMARY ===')
 
     itemsWithSubtotal.forEach((item, index) => {
-      console.log(`${item.name} (${item.quantity}x) - ${item.subtotal.format()}`);
-    });
+      console.log(
+        `${item.name} (${item.quantity}x) - ${item.subtotal.format()}`,
+      )
+    })
 
-    console.log("-----------------------");
-    console.log(`TOTAL: ${total.format()}`);
+    console.log('-----------------------')
+    console.log(`TOTAL: ${total.format()}`)
 
     return {
       items: itemsWithSubtotal,
-      total
-    };
+      total,
+    }
   }
 }
 
 // Usage
-const cart = new ShoppingCart();
-cart.addItem("Laptop", 4599.90, 1);
-cart.addItem("Mouse", 89.90, 2);
-cart.addItem("Keyboard", 199.90, 1);
+const cart = new ShoppingCart()
+cart.addItem('Laptop', 4599.9, 1)
+cart.addItem('Mouse', 89.9, 2)
+cart.addItem('Keyboard', 199.9, 1)
 
-const summary = cart.summary();
-const totalWithDiscount = cart.applyCoupon(15);
-console.log(`TOTAL WITH DISCOUNT (15%): ${totalWithDiscount.format()}`);
+const summary = cart.summary()
+const totalWithDiscount = cart.applyCoupon(15)
+console.log(`TOTAL WITH DISCOUNT (15%): ${totalWithDiscount.format()}`)
 ```
 
 ## 9. 🧪 Running Tests

@@ -7,9 +7,10 @@ const banner = `
  * ${packageJson.description}
  *
  * @license ${packageJson.license}
- * @copyright ${new Date().getFullYear()} ${packageJson.author}
+ * @copyright ${new Date().getFullYear()}
+ * @author ${packageJson.author}
  * @see ${packageJson.homepage}
- * @see ${packageJson.repository}
+ * @see ${packageJson.repository.url}
  */`
 
 export default defineConfig({
