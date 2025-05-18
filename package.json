@@ -1,14 +1,12 @@
 {
   "name": "@eriveltonsilva/currency.js",
   "version": "0.0.1",
-  "description": "A JavaScript library for currency operations",
+  "description": "Biblioteca especializada para manipulação de valores monetários, evitando problemas de arredondamento com números de ponto flutuante e oferecendo uma API rica para operações financeiras.",
   "keywords": [
     "currency",
     "currency.js",
-    "currency-js",
     "money",
-    "money.js",
-    "money-js"
+    "money.js"
   ],
   "license": "MIT",
   "type": "module",
@@ -24,6 +22,7 @@
   },
   "author": "Erivelton Silva <eriveltondasilva13@gmail.com>",
   "homepage": "https://github.com/eriveltondasilva/currency.js#readme",
+  "repository": "https://github.com/eriveltondasilva/currency.js",
   "bugs": "https://github.com/eriveltondasilva/currency.js/issues",
   "files": [
     "./dist"
