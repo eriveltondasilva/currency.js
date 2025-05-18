@@ -1,6 +1,6 @@
 {
   "name": "@eriveltonsilva/currency.js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Biblioteca especializada para manipulação de valores monetários, evitando problemas de arredondamento com números de ponto flutuante e oferecendo uma API rica para operações financeiras.",
   "keywords": [
     "currency",
@@ -11,7 +11,7 @@
   "license": "MIT",
   "type": "module",
   "engines": {
-    "node": ">=22"
+    "node": ">=20"
   },
   "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
@@ -44,7 +44,7 @@
     "@tsconfig/node-ts": "^23.6.1",
     "@tsconfig/node20": "^20.1.5",
     "@tsconfig/strictest": "^2.0.5",
-    "@types/node": "^22.15.11",
+    "@types/node": "^22.15.18",
     "prettier": "^3.5.3",
     "ts-node": "^10.9.2",
     "tsup": "^8.4.0",
