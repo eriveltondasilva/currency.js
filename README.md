@@ -39,18 +39,18 @@ A lightweight, robust JavaScript library for currency operations with precision 
   - [8.2. Internal Rounding](#82-internal-rounding)
   - [8.3. Preference for the allocate Method](#83-preference-for-the-allocate-method)
 - [9. ⚡ Advanced Examples](#9--advanced-examples)
-  - [9.1. Processing Payments\*\*](#91-processing-payments)
+  - [9.1. Processing Payments](#91-processing-payments)
   - [9.2. Shopping Cart](#92-shopping-cart)
   - [9.3. Tax Calculation](#93-tax-calculation)
-- [10. 🧪 Running Tests](#10--running-tests)
-- [11. 🤝 Contributing](#11--contributing)
-- [12. 📊 Similar Libraries](#12--similar-libraries)
-- [13. 🔗 Useful Links](#13--useful-links)
+- [10. 📊 Similar Libraries](#10--similar-libraries)
+- [11. 🔗 Useful Links](#11--useful-links)
+- [12. 🧪 Running Tests](#12--running-tests)
+- [13. 🤝 Contributing](#13--contributing)
 - [14. 📄 License](#14--license)
 
 ## 1. 🚀 Features
 
-- ✅ Zero dependencies: Lightweight implementation with no external dependencies
+- ✅ **Zero dependencies**: Lightweight implementation with no external dependencies
 - ✅ **Safe arithmetic operations**: Addition, subtraction, multiplication, division
 - ✅ **Precise calculations**: Based on integer cents to avoid floating-point errors
 - ✅ **Currency formatting**: Configurable formatting with internationalization support
@@ -549,29 +549,7 @@ const product = { name: 'Smartphone', price: 1299.99 };
 const taxSummary = TaxCalculator.generateTaxSummary(product);
 ```
 
-## 10. 🧪 Running Tests
-
-```bash
-# Run the test suite
-npm test
-
-# Run the test suite with coverage
-npm run test:coverage
-```
-
-## 11. 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-Please make sure to update tests as appropriate.
-
-## 12. 📊 Similar Libraries
+## 10. 📊 Similar Libraries
 
 Here's how Currency.js compares to other popular currency and money handling libraries:
 
@@ -585,12 +563,34 @@ Here's how Currency.js compares to other popular currency and money handling lib
 
 Currency.js differentiates itself through its business-oriented features like discount calculations, installment distribution, and shopping cart helpers, while maintaining a lightweight footprint and intuitive API.
 
-## 13. 🔗 Useful Links
+## 11. 🔗 Useful Links
 
 - [GitHub Repository](https://github.com/eriveltondasilva/currency.js)
 - [Report Issues](https://github.com/eriveltondasilva/currency.js/issues)
 - [Complete Documentation](https://github.com/eriveltondasilva/currency.js#readme)
 - [NPM Package](https://www.npmjs.com/package/@eriveltonsilva/currency.js)
+
+## 12. 🧪 Running Tests
+
+```bash
+# Run the test suite
+npm test
+
+# Run the test suite with coverage
+npm run test:coverage
+```
+
+## 13. 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+Please make sure to update tests as appropriate.
 
 ## 14. 📄 License
 
