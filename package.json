@@ -42,7 +42,7 @@
   "devDependencies": {
     "@eriveltonsilva/prettier-config": "^1.0.1",
     "@tsconfig/node-ts": "^23.6.1",
-    "@tsconfig/node22": "^22.0.1",
+    "@tsconfig/node20": "^20.1.5",
     "@tsconfig/strictest": "^2.0.5",
     "@types/node": "^22.15.11",
     "prettier": "^3.5.3",
