@@ -10,8 +10,6 @@
     "files": true,
   },
   "compilerOptions": {
-    "importHelpers": true,
-    //
     "outDir": "./dist",
     "rootDir": "./src",
     //
