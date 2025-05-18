@@ -1,6 +1,6 @@
 {
   "name": "@eriveltonsilva/currency.js",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Biblioteca especializada para manipulação de valores monetários, evitando problemas de arredondamento com números de ponto flutuante e oferecendo uma API rica para operações financeiras.",
   "keywords": [
     "currency",
