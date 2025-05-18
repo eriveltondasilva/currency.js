@@ -1,5 +1,4 @@
-<!-- omit in toc -->
-# 💰 Currency.js — Currency Manipulation Library
+# 💰 Currency.js — Currency Manipulation Library <!-- omit in toc -->
 
 ![npm](https://img.shields.io/npm/v/@eriveltonsilva/currency.js)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
@@ -14,8 +13,7 @@ A lightweight, robust JavaScript library for currency operations with precision 
   <img src="https://raw.githubusercontent.com/eriveltondasilva/currency.js/main/assets/currency-banner.png" alt="Currency.js Banner" width="600">
 </p>
 
-<!-- omit in toc -->
-## 📋 Table of Contents
+## 📋 Table of Contents <!-- omit in toc -->
 
 - [1. 🚀 Features](#1--features)
 - [2. 📦 Installation](#2--installation)
