@@ -1,56 +1,64 @@
-# @eriveltonsilva/currency.js - Currency Manipulation Library
+<!-- omit in toc -->
+# 💰 Currency.js — Currency Manipulation Library
 
 ![npm](https://img.shields.io/npm/v/@eriveltonsilva/currency.js)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Node](https://img.shields.io/badge/node-%3E%3D22-brightgreen)
+![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)
+![Typescript](https://img.shields.io/badge/TypeScript-5.8-blue)
+![Tests](https://img.shields.io/badge/tests-passing-success)
+![Size](https://img.shields.io/bundlephobia/minzip/@eriveltonsilva/currency.js)
 
 A lightweight, robust JavaScript library for currency operations with precision and reliability. Designed to handle monetary values safely, avoiding floating point issues common in financial calculations.
 
-## Table of Contents
+<p align="center">
+  <img src="https://raw.githubusercontent.com/eriveltondasilva/assets/main/currency-banner.png" alt="Currency.js Banner" width="600">
+</p>
 
-- [@eriveltonsilva/currency.js - Currency Manipulation Library](#eriveltonsilvacurrencyjs---currency-manipulation-library)
-  - [Table of Contents](#table-of-contents)
-  - [🚀 Features](#-features)
-  - [📦 Installation](#-installation)
-  - [🔍 Basic Usage](#-basic-usage)
-  - [📚 API Documentation](#-api-documentation)
-    - [Library Exports](#library-exports)
-    - [Creating Money Instances](#creating-money-instances)
-    - [Properties](#properties)
-    - [Formatting](#formatting)
-    - [Comparison Methods](#comparison-methods)
-    - [Arithmetic Operations](#arithmetic-operations)
-    - [Transformation Methods](#transformation-methods)
-    - [Business Operations](#business-operations)
-    - [Calculator API](#calculator-api)
-  - [🌎 Internationalization](#-internationalization)
-  - [🔄 Rounding Methods](#-rounding-methods)
-  - [💡 Best Practices](#-best-practices)
-    - [Avoid Floating Point Arithmetic](#avoid-floating-point-arithmetic)
-    - [Chain Operations for Readability](#chain-operations-for-readability)
-    - [Immutability](#immutability)
-  - [🧪 Running Tests](#-running-tests)
-  - [🤝 Contributing](#-contributing)
-  - [📄 License](#-license)
-  - [🔗 Useful Links](#-useful-links)
+<!-- omit in toc -->
+## 📋 Table of Contents
 
-## 🚀 Features
+- [1. 🚀 Features](#1--features)
+- [2. 📦 Installation](#2--installation)
+- [3. 🔍 Basic Usage](#3--basic-usage)
+- [4. 📚 API Documentation](#4--api-documentation)
+  - [4.1. Library Exports](#41-library-exports)
+  - [4.2. Creating Money Instances](#42-creating-money-instances)
+  - [4.3. Properties](#43-properties)
+  - [4.4. Formatting](#44-formatting)
+  - [4.5. Comparison Methods](#45-comparison-methods)
+  - [4.6. Arithmetic Operations](#46-arithmetic-operations)
+  - [4.7. Transformation Methods](#47-transformation-methods)
+  - [4.8. Business Operations](#48-business-operations)
+  - [4.9. Calculator API](#49-calculator-api)
+- [5. 🌎 Internationalization](#5--internationalization)
+- [6. 🔄 Rounding Methods](#6--rounding-methods)
+- [7. 💡 Best Practices](#7--best-practices)
+  - [7.1. Avoid Floating Point Arithmetic](#71-avoid-floating-point-arithmetic)
+  - [7.2. Chain Operations for Readability](#72-chain-operations-for-readability)
+  - [7.3. Immutability](#73-immutability)
+- [8. ⚡ Advanced Examples](#8--advanced-examples)
+- [9. 🧪 Running Tests](#9--running-tests)
+- [10. 🤝 Contributing](#10--contributing)
+- [11. 📄 License](#11--license)
+- [12. 🔗 Useful Links](#12--useful-links)
 
-- **Safe arithmetic operations**: Addition, subtraction, multiplication, division
-- **Precise calculations**: Based on integer cents to avoid floating-point errors
-- **Currency formatting**: Configurable formatting with internationalization support
-- **Money comparison**: Easy value comparison with expressive methods
-- **Business operations**: Discount, surcharge, percentage calculations
-- **Payment helpers**: Installment distribution, subtotals, average calculations
+## 1. 🚀 Features
 
-## 📦 Installation
+- ✅ **Safe arithmetic operations**: Addition, subtraction, multiplication, division
+- ✅ **Precise calculations**: Based on integer cents to avoid floating-point errors
+- ✅ **Currency formatting**: Configurable formatting with internationalization support
+- ✅ **Money comparison**: Easy value comparison with expressive methods
+- ✅ **Business operations**: Discount, surcharge, percentage calculations
+- ✅ **Payment helpers**: Installment distribution, subtotals, average calculations
+
+## 2. 📦 Installation
 
 ```bash
 # npm
 npm install @eriveltonsilva/currency.js
 ```
 
-## 🔍 Basic Usage
+## 3. 🔍 Basic Usage
 
 ```javascript
 import Money from '@eriveltonsilva/currency.js'
@@ -75,9 +83,9 @@ console.log(
 ) // 14,99 €
 ```
 
-## 📚 API Documentation
+## 4. 📚 API Documentation
 
-### Library Exports
+### 4.1. Library Exports
 
 The `@eriveltonsilva/currency.js` library offers several exports for use in your project:
 
@@ -101,7 +109,7 @@ import type {
 } from '@eriveltonsilva/currency.js';
 ```
 
-### Creating Money Instances
+### 4.2. Creating Money Instances
 
 ```javascript
 // Basic usage
@@ -131,7 +139,7 @@ const eur = Currency.EUR(99.99);  // 99.99 €
 const brl = Currency.BRL(99.99);  // R$ 99,99
 ```
 
-### Properties
+### 4.3. Properties
 
 ```javascript
 const money = Money(10.5)
@@ -145,7 +153,7 @@ money.isPositive // true
 money.isNegative // false
 ```
 
-### Formatting
+### 4.4. Formatting
 
 ```javascript
 const price = Money(1234.56)
@@ -166,7 +174,7 @@ price.format({
 price.toString() // "1234.56"
 ```
 
-### Comparison Methods
+### 4.5. Comparison Methods
 
 ```javascript
 const price1 = Money(100)
@@ -180,7 +188,7 @@ price1.lessThanOrEqual(price2) // true
 price1.isBetween(50, 150) // true
 ```
 
-### Arithmetic Operations
+### 4.6. Arithmetic Operations
 
 ```javascript
 const price = Money(100)
@@ -195,7 +203,7 @@ const half = price.dividedBy(2) // 50
 const result = price.plus(50).times(2).minus(25) // 275
 ```
 
-### Transformation Methods
+### 4.7. Transformation Methods
 
 ```javascript
 const price = Money(-10.56)
@@ -207,7 +215,7 @@ const minimum = price.min(Money(5)) // -10.56
 const rounded = price.round(10) // -10.6 (rounded to 1 decimal place)
 ```
 
-### Business Operations
+### 4.8. Business Operations
 
 ```javascript
 const price = Money(100)
@@ -221,7 +229,7 @@ const increased = price.applySurcharge(15) // 115 (15% added)
 const parts = price.allocate(3) // [Money(33.34), Money(33.33), Money(33.33)]
 ```
 
-### Calculator API
+### 4.9. Calculator API
 
 For more complex operations, you can use the Calculator API:
 
@@ -257,7 +265,7 @@ const total = Calculator.calculateTotal(items) // $97.75
 const average = Calculator.calculateAveragePrice(items) // $15.42
 ```
 
-## 🌎 Internationalization
+## 5. 🌎 Internationalization
 
 Currency.js supports various currency codes and locales for formatting:
 
@@ -278,7 +286,7 @@ amount.format({
 })
 ```
 
-## 🔄 Rounding Methods
+## 6. 🔄 Rounding Methods
 
 The library supports different rounding modes:
 
@@ -293,9 +301,9 @@ price.round(10, ROUNDING_MODES.CEIL) // 10.6 (round up)
 price.round(10, ROUNDING_MODES.TRUNC) // 10.5 (truncate)
 ```
 
-## 💡 Best Practices
+## 7. 💡 Best Practices
 
-### Avoid Floating Point Arithmetic
+### 7.1. Avoid Floating Point Arithmetic
 
 ```javascript
 // ❌ Bad: using floating point
@@ -309,7 +317,7 @@ const tax = subtotal.percentage(7)
 const total = subtotal.plus(tax) // 21.39
 ```
 
-### Chain Operations for Readability
+### 7.2. Chain Operations for Readability
 
 ```javascript
 // ✅ Good: chaining for readability
@@ -320,7 +328,7 @@ const finalPrice = Money(100)
   .round(20) // Round to 2 decimal places
 ```
 
-### Immutability
+### 7.3. Immutability
 
 All operations return new Money instances, preserving the original value:
 
@@ -332,14 +340,114 @@ console.log(original.value) // Still 100
 console.log(discounted.value) // 90
 ```
 
-## 🧪 Running Tests
+## 8. ⚡ Advanced Examples
+
+**Example 1: Processing Payments**
+
+```javascript
+function processPayment(totalAmount, numberOfInstallments, discount = 0) {
+  // Apply discount if available
+  let finalAmount = Money(totalAmount);
+
+  if (discount > 0) {
+    finalAmount = finalAmount.applyDiscount(discount);
+    console.log(`Discount applied: ${finalAmount.format()}`);
+  }
+
+  // Calculate installments
+  const installments = finalAmount.allocate(numberOfInstallments);
+
+  console.log(`Total amount: ${finalAmount.format()}`);
+  console.log(`Payment in ${numberOfInstallments} installments:`);
+
+  installments.forEach((installment, index) => {
+    console.log(`Installment ${index + 1}: ${installment.format()}`);
+  });
+
+  return {
+    totalAmount: finalAmount,
+    installments
+  };
+}
+
+// Usage
+const result = processPayment(1299.99, 5, 10);
+```
+
+**Example 2: Shopping Cart**
+
+```javascript
+class ShoppingCart {
+  items = [];
+
+  addItem(name, price, quantity = 1) {
+    this.items.push({
+      name: name,
+      price: price,
+      quantity: quantity
+    });
+  }
+
+  removeItem(index) {
+    if (index >= 0 && index < this.items.length) {
+      this.items.splice(index, 1);
+    }
+  }
+
+  calculateSubtotals() {
+    return this.items.map(item => ({
+      ...item,
+      subtotal: Calculator.calculateSubtotal(item)
+    }));
+  }
+
+  calculateTotal() {
+    return Calculator.calculateTotal(this.items);
+  }
+
+  applyCoupon(discountPercentage) {
+    return this.calculateTotal().applyDiscount(discountPercentage);
+  }
+
+  summary() {
+    const itemsWithSubtotal = this.calculateSubtotals();
+    const total = this.calculateTotal();
+
+    console.log("=== CART SUMMARY ===");
+
+    itemsWithSubtotal.forEach((item, index) => {
+      console.log(`${item.name} (${item.quantity}x) - ${item.subtotal.format()}`);
+    });
+
+    console.log("-----------------------");
+    console.log(`TOTAL: ${total.format()}`);
+
+    return {
+      items: itemsWithSubtotal,
+      total
+    };
+  }
+}
+
+// Usage
+const cart = new ShoppingCart();
+cart.addItem("Laptop", 4599.90, 1);
+cart.addItem("Mouse", 89.90, 2);
+cart.addItem("Keyboard", 199.90, 1);
+
+const summary = cart.summary();
+const totalWithDiscount = cart.applyCoupon(15);
+console.log(`TOTAL WITH DISCOUNT (15%): ${totalWithDiscount.format()}`);
+```
+
+## 9. 🧪 Running Tests
 
 ```bash
 # Run the test suite
 npm test
 ```
 
-## 🤝 Contributing
+## 10. 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
@@ -351,12 +459,13 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 Please make sure to update tests as appropriate.
 
-## 📄 License
+## 11. 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🔗 Useful Links
+## 12. 🔗 Useful Links
 
 - [GitHub Repository](https://github.com/eriveltondasilva/currency.js)
 - [Report Issues](https://github.com/eriveltondasilva/currency.js/issues)
 - [Complete Documentation](https://github.com/eriveltondasilva/currency.js#readme)
+- [NPM Package](https://www.npmjs.com/package/@eriveltonsilva/currency.js)
