@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    name: Testes e Verificação de Tipos
+    name: Testes e Verificação
     runs-on: ubuntu-22.04
 
     strategy:
@@ -28,8 +28,11 @@ jobs:
       - name: Instalar dependências
         run: npm ci
 
+      - name: Verificar linting
+        run: npm run lint
+
       - name: Verificar tipos
-        run: npm run check:types
+        run: npm run lint:types
 
       - name: Executar testes
         run: npm test
