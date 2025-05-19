@@ -15,16 +15,16 @@ describe('ConversionService', () => {
 
   describe('método toCents', () => {
     it('deve lançar erro quando o valor for nulo ou indefinido', () => {
-      expect(() => conversionService.toCents(null as any)).toThrow(
+      expect(() => conversionService.toCents(null as never)).toThrow(
         'O valor não pode ser nulo ou indefinido',
       )
-      expect(() => conversionService.toCents(undefined as any)).toThrow(
+      expect(() => conversionService.toCents(undefined as never)).toThrow(
         'O valor não pode ser nulo ou indefinido',
       )
     })
 
     it('deve retornar cents diretamente quando o objeto tiver a propriedade cents', () => {
-      expect(conversionService.toCents({ cents: 1234 } as any)).toBe(1234)
+      expect(conversionService.toCents({ cents: 1234 } as never)).toBe(1234)
     })
 
     it('deve converter string para centavos', () => {

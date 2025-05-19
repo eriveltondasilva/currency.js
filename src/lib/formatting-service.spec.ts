@@ -64,17 +64,17 @@ describe('FormattingService', () => {
       })
 
       // Formato alemão para EUR: 1.234,56 €
-      expect(result).toMatch(/1\.234,56\s\€/)
+      expect(result).toMatch(/1\.234,56\s€/)
     })
 
     it('deve lançar erro quando o valor é nulo', () => {
-      expect(() => formattingService.format(null as any)).toThrow(
+      expect(() => formattingService.format(null as never)).toThrow(
         'O valor não pode ser nulo ou indefinido',
       )
     })
 
     it('deve lançar erro quando o valor é indefinido', () => {
-      expect(() => formattingService.format(undefined as any)).toThrow(
+      expect(() => formattingService.format(undefined as never)).toThrow(
         'O valor não pode ser nulo ou indefinido',
       )
     })

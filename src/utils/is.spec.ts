@@ -21,7 +21,6 @@ describe('isArray', () => {
   it('deve retornar true para arrays', () => {
     expect(isArray([])).toBe(true)
     expect(isArray([1, 2, 3])).toBe(true)
-    expect(isArray(new Array())).toBe(true)
   })
 
   it('deve retornar false para não-arrays', () => {
