@@ -1,35 +1,57 @@
-name: Release
+# .github/workflows/release.yml
+name: RELEASE
 
 on:
   push:
-    tags:
-      - 'v*'
+    tags: [v*.*.*]
+
+permissions:
+  contents: write
+
+env:
+  NODE_VERSION: 20.x
 
 jobs:
-  build-and-publish:
-    name: Publicar no npm
+  publish:
+    name: 🚀 Publicação no npm
     runs-on: ubuntu-22.04
 
     steps:
-      - name: Checkout do código
+      - name: faz checkout do código
         uses: actions/checkout@v4
 
-      - name: Configurar Node.js
+      - name: configura do Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: https://registry.npmjs.org
+          cache: npm
 
-      - name: Instalar dependências
+      - name: instala dependências
         run: npm ci
 
-      - name: Executar lint & testes
-        run: npm validate
+      - name: valida código
+        run: npm run validate
 
-      - name: Build
+      - name: executa build
         run: npm run build
 
-      - name: Publicar no npm
+      - name: extrai versão do package
+        id: get-version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: publica no npm
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: cria release no github
+        uses: softprops/action-gh-release@v2
+        with:
+          name: v${{ steps.get-version.outputs.VERSION }}
+          body_path: ${{ github.workspace }}/CHANGELOG.md
+          files: dist/*
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
