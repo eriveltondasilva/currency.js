@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    name: Testes e Verificação
+    name: 🔍 Testes e Verificação
     runs-on: ubuntu-22.04
 
     strategy:
@@ -16,26 +16,26 @@ jobs:
         node-version: [20.x, 22.x]
 
     steps:
-      - name: Checkout do código
+      - name: faz checkout do código
         uses: actions/checkout@v4
 
-      - name: Configurar Node.js ${{ matrix.node-version }}
+      - name: configura Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      - name: Instalar dependências
+      - name: instala dependências
         run: npm ci
 
-      - name: Verificar linting
+      - name: verifica tipos
+        run: npm run check:types
+
+      - name: verifica linting
         run: npm run lint
 
-      - name: Verificar tipos
-        run: npm run lint:types
-
-      - name: Executar testes
+      - name: executa testes
         run: npm test
 
-      - name: Verificar build
+      - name: executa build
         run: npm run build
