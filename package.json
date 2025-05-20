@@ -57,15 +57,15 @@
     "start": "node ./dist/index.cjs",
     "dev": "tsx --env-file=.env ./src/index.ts",
     "clean": "rm -rf ./dist ./coverage",
-    "validate": "npm run lint && npm run lint:types && npm run test",
+    "validate": " npm run check:types && npm run lint && npm run test",
 
     "fmt": "prettier --write ./src/**",
     "lint": "eslint --fix ./src/**",
-    "lint:types": "tsc --noEmit",
+    "check:types": "tsc --noEmit",
 
-    "release:patch": "npm version patch && npm publish",
-    "release:minor": "npm version minor && npm publish",
-    "release:major": "npm version major && npm publish",
+    "release:patch": "npm version patch",
+    "release:minor": "npm version minor",
+    "release:major": "npm version major",
 
     "deps:check": "npx npm-check-updates",
     "deps:update": "npx npm-check-updates -u && npm install",
