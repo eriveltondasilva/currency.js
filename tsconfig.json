@@ -12,6 +12,7 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
+    "removeComments": true,
     //
     "baseUrl": ".",
     "paths": {
@@ -22,7 +23,9 @@
   "exclude": [
     "node_modules",
     "dist",
+    "docs",
     "__tests__",
+    "**/*.example.ts",
     "**/*.spec.ts",
     "**/*.test.ts"
   ]
