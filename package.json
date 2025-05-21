@@ -44,7 +44,8 @@
   "files": [
     "./dist",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "CHANGELOG.md"
   ],
   "contributors": [],
   "prettier": "@eriveltonsilva/prettier-config",
@@ -53,19 +54,18 @@
   },
   "scripts": {
     "build": "tsup",
-    "prepublishOnly": "npm run test && npm run build",
+    "build:release": "tsup --minify",
+    "prebuild": "npm run validate",
+    "prepublishOnly": "npm run validate && npm run build:release",
+    "validate": "npm run check:types && npm run lint && npm run test",
+
     "start": "node ./dist/index.cjs",
     "dev": "tsx --env-file=.env ./src/index.ts",
     "clean": "rm -rf ./dist ./coverage",
-    "validate": " npm run check:types && npm run lint && npm run test",
 
     "fmt": "prettier --write ./src/**",
     "lint": "eslint --fix ./src/**",
     "check:types": "tsc --noEmit",
-
-    "release:patch": "npm version patch",
-    "release:minor": "npm version minor",
-    "release:major": "npm version major",
 
     "deps:check": "npx npm-check-updates",
     "deps:update": "npx npm-check-updates -u && npm install",

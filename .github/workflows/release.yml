@@ -4,9 +4,11 @@ name: RELEASE
 on:
   push:
     tags: [v*.*.*]
+    branches: [main]
 
 permissions:
   contents: write
+  packages: write
 
 env:
   NODE_VERSION: 20.x
@@ -29,12 +31,6 @@ jobs:
 
       - name: instala dependências
         run: npm ci
-
-      - name: valida código
-        run: npm run validate
-
-      - name: executa build
-        run: npm run build
 
       - name: extrai versão do package
         id: get-version
