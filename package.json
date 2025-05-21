@@ -42,7 +42,7 @@
     "email": "eriveltondasilva13@gmail.com"
   },
   "files": [
-    "./dist",
+    "dist",
     "LICENSE",
     "README.md",
     "CHANGELOG.md"
@@ -55,12 +55,10 @@
   "scripts": {
     "build": "tsup",
     "build:release": "tsup --minify",
-    "prebuild": "npm run validate",
-    "prepublishOnly": "npm run validate && npm run build:release",
     "validate": "npm run check:types && npm run lint && npm run test",
 
     "start": "node ./dist/index.cjs",
-    "dev": "tsx --env-file=.env ./src/index.ts",
+    "dev": "node --env-file=.env ./src/index.ts",
     "clean": "rm -rf ./dist ./coverage",
 
     "fmt": "prettier --write ./src/**",
@@ -69,6 +67,11 @@
 
     "deps:check": "npx npm-check-updates",
     "deps:update": "npx npm-check-updates -u && npm install",
+
+    "version:patch": "npm version patch -m \"chore(release): v%s\"",
+    "version:minor": "npm version minor -m \"chore(release): v%s\"",
+    "version:major": "npm version major -m \"chore(release): v%s\"",
+    "postversion": "git push && git push --tags",
 
     "test": "vitest run",
     "test:watch": "vitest",

@@ -28,14 +28,11 @@ jobs:
       - name: instala dependências
         run: npm ci
 
-      - name: verifica tipos
-        run: npm run check:types
-
-      - name: verifica linting
-        run: npm run lint
-
-      - name: executa testes
-        run: npm test
+      - name: verifica o código
+        run: |
+          npm run check:types
+          npm run lint
+          npm run test
 
       - name: executa build
         run: npm run build

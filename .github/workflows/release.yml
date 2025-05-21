@@ -32,6 +32,15 @@ jobs:
       - name: instala dependências
         run: npm ci
 
+      - name: valida o código
+        run: |
+          npm run check:types
+          npm run lint
+          npm run test
+
+      - name: executa o build
+        run: npm run build:release
+
       - name: extrai versão do package
         id: get-version
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
