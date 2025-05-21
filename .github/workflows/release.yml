@@ -49,14 +49,3 @@ jobs:
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: cria release no github
-        uses: softprops/action-gh-release@v2
-        with:
-          name: v${{ steps.get-version.outputs.VERSION }}
-          body_path: ${{ github.workspace }}/CHANGELOG.md
-          files: dist/*
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
