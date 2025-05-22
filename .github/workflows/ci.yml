@@ -15,18 +15,14 @@ jobs:
     name: 🔍 Validação
     runs-on: ubuntu-22.04
 
-    strategy:
-      matrix:
-        node-version: [20.x, 22.x]
-
     steps:
       - name: faz checkout do código
         uses: actions/checkout@v4
 
-      - name: configura Node.js ${{ matrix.node-version }}
+      - name: configura Node.js 20
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 20.x
           cache: 'npm'
 
       - name: instala as dependências

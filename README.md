@@ -2,9 +2,10 @@
 
 ![npm](https://img.shields.io/npm/v/@eriveltonsilva/currency.js)
 ![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)
-![Typescript](https://img.shields.io/badge/TypeScript-5.8-blue)
+![Typescript](https://img.shields.io/badge/TypeScript-5.8-blue) <br>
 ![Zero Dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)
-![Size](https://img.shields.io/bundlephobia/minzip/@eriveltonsilva/currency.js)
+![Size](https://img.shields.io/bundlephobia/minzip/@eriveltonsilva/currency.js) <br>
+![CI](https://github.com/eriveltondasilva/currency.js/actions/workflows/ci.yml/badge.svg)
 ![Tests](https://img.shields.io/badge/tests-passing-success)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
@@ -80,13 +81,13 @@ const installments = subtotal.allocate(3)  // [42.00, 42.00, 41.99]
 
 ## 4. ✨ Key Features
 
-- **Zero Dependencies**: Lightweight implementation (< 5KB min+gzip)
-- **Type-Safe Operations**: Full TypeScript support with comprehensive type definitions
-- **Immutable Values**: All operations return new Money instances
-- **Precise Calculations**: Uses integer-based math to eliminate floating-point errors
-- **Business Operations**: Support for discounts, taxes, installments, and more
-- **Flexible Formatting**: Internationalization support for 100+ currencies and locales
-- **Simple API**: Intuitive method names and chainable operations
+- ✅ **Zero Dependencies**: Lightweight implementation (< 5KB min+gzip)
+- ✅ **Type-Safe Operations**: Full TypeScript support with comprehensive type definitions
+- ✅ **Immutable Values**: All operations return new Money instances
+- ✅ **Precise Calculations**: Uses integer-based math to eliminate floating-point errors
+- ✅ **Business Operations**: Support for discounts, taxes, installments, and more
+- ✅ **Flexible Formatting**: Internationalization support for 100+ currencies and locales
+- ✅ **Simple API**: Intuitive method names and chainable operations
 
 ## 5. 🔧 Core APIs
 
@@ -179,4 +180,4 @@ Thanks to all the people who have contributed to this project:
 
 - [Erivelton Silva](https://github.com/eriveltondasilva) - Creator
 
-To become a contributor, please see the [🤝 Contributing](#-contributing) section.
+To become a contributor, please see the [🤝 Contributing](#8--contributing) section.

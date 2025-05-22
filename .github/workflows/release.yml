@@ -36,10 +36,6 @@ jobs:
       - name: executa o build
         run: npm run build:release
 
-      - name: extrai versão do package
-        id: get-version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
-
       - name: publica no npm
         run: npm publish
         env:
