@@ -22,7 +22,6 @@ export interface FormatOptions {
   maximumFractionDigits?: number
 }
 
-//
 export interface IConversionService {
   toCents(value: MoneyInput): number
 }
@@ -50,8 +49,6 @@ export interface ICalculationService {
 export interface IRoundingService {
   round(value: number, precision: number, mode: RoundingModes): number
 }
-
-// #src\lib\money.ts
 
 interface IMoneyProperties {
   cents: number
