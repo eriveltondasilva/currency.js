@@ -1,7 +1,7 @@
 {
   "name": "@eriveltonsilva/currency.js",
   "description": "A lightweight and reliable JavaScript library for precise currency operations, built to safely handle monetary values without floating point errors.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "keywords": [
     "currency",
     "currency.js",
@@ -57,23 +57,18 @@
     "build": "tsup",
     "build:release": "tsup --minify",
     "prepare": "husky",
-
     "start": "node ./dist/index.cjs",
     "dev": "node --env-file=.env ./src/index.ts",
-
     "fmt": "prettier --write ./src/**",
     "lint": "eslint --fix ./src/**",
     "clean": "rm -rf ./dist ./coverage",
     "check:types": "tsc --noEmit",
-
     "code:fix": "npm run fmt && npm run lint",
     "validate": "npm run check:types && npm run lint && npm run test",
-
     "version:patch": "npm version patch -m \"chore(release): v%s\"",
     "version:minor": "npm version minor -m \"chore(release): v%s\"",
     "version:major": "npm version major -m \"chore(release): v%s\"",
     "postversion": "git push && git push --tags",
-
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage"
