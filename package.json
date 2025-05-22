@@ -59,7 +59,7 @@
     "prepare": "husky",
     "start": "node ./dist/index.cjs",
     "dev": "node --env-file=.env ./src/index.ts",
-    "fmt": "prettier --write ./src/**",
+    "fmt": "prettier ./src/** --write --cache --cache-strategy metadata",
     "lint": "eslint --fix ./src/**",
     "clean": "rm -rf ./dist ./coverage",
     "check:types": "tsc --noEmit",
