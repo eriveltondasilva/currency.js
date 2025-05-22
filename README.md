@@ -2,7 +2,7 @@
 
 ![npm](https://img.shields.io/npm/v/@eriveltonsilva/currency.js)
 ![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)
-![Typescript](https://img.shields.io/badge/TypeScript-5.8-blue) <br>
+![Typescript](https://img.shields.io/badge/TypeScript-5.8-blue)
 ![Zero Dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)
 ![Size](https://img.shields.io/bundlephobia/minzip/@eriveltonsilva/currency.js) <br>
 ![CI](https://github.com/eriveltondasilva/currency.js/actions/workflows/ci.yml/badge.svg)
