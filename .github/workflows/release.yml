@@ -13,8 +13,6 @@ jobs:
     name: 🚀 Publicação no npm
     runs-on: ubuntu-22.04
 
-    if: github.ref == 'refs/heads/main'
-
     steps:
       - name: faz checkout do código
         uses: actions/checkout@v4
