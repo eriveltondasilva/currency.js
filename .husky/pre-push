@@ -1,1 +1,1 @@
-npm run validate
+npm run fmt && npm run validate

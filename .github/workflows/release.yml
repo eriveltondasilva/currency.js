@@ -1,4 +1,3 @@
-# .github/workflows/release.yml
 name: RELEASE
 
 on:
@@ -8,7 +7,6 @@ on:
 
 permissions:
   contents: write
-  packages: write
 
 env:
   NODE_VERSION: 20.x

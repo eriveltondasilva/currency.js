@@ -1,8 +1,8 @@
 import { defineConfig } from 'tsup'
 import packageJson from './package.json'
 
-const banner = `
-/**
+const banner =
+`/**
  * ${packageJson.name} v${packageJson.version}
  * ${packageJson.description}
  *
