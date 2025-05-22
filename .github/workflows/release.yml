@@ -2,32 +2,31 @@ name: RELEASE
 
 on:
   push:
-    tags: [v*.*.*]
-    branches: [main]
+    tags:
+      - v*.*.*
 
 permissions:
   contents: write
-
-env:
-  NODE_VERSION: 20.x
 
 jobs:
   publish:
     name: 🚀 Publicação no npm
     runs-on: ubuntu-22.04
 
+    if: github.ref == 'refs/heads/main'
+
     steps:
       - name: faz checkout do código
         uses: actions/checkout@v4
 
-      - name: configura do Node.js
+      - name: configura Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: 20.x
           registry-url: https://registry.npmjs.org
           cache: npm
 
-      - name: instala dependências
+      - name: instala as dependências
         run: npm ci
 
       - name: valida o código

@@ -1,1 +1,1 @@
-npm run fmt && npm run validate
+npm run fmt && npm run check:types && npm run lint && npm run test

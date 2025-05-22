@@ -2,13 +2,17 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+    tags-ignore:
+      - '**'
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   test:
-    name: 🔍 Testes e Verificação
+    name: 🔍 Validação
     runs-on: ubuntu-22.04
 
     strategy:
@@ -25,7 +29,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      - name: instala dependências
+      - name: instala as dependências
         run: npm ci
 
       - name: verifica o código
@@ -34,5 +38,5 @@ jobs:
           npm run lint
           npm run test
 
-      - name: executa build
+      - name: executa o build
         run: npm run build
