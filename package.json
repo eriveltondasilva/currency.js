@@ -59,7 +59,7 @@
     "prepublishOnly": "npm run build:release",
     "prepare": "husky",
     "start": "node ./dist/index.cjs",
-    "dev": "node --env-file=.env ./src/index.ts",
+    "dev": "tsx --env-file=.env ./src/index.ts",
     "fmt": "prettier ./src/** --write --cache --cache-strategy metadata",
     "lint": "eslint --fix ./src/**",
     "clean": "rm -rf ./dist ./coverage",
@@ -87,8 +87,8 @@
     "globals": "^16.1.0",
     "husky": "^9.1.7",
     "prettier": "^3.5.3",
-    "ts-node": "^10.9.2",
     "tsup": "^8.5.0",
+    "tsx": "^4.19.4",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.32.1",
     "vitest": "^3.1.3"
