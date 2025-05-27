@@ -1,7 +1,7 @@
-import { CURRENCY_LOCALES, FORMAT_STYLES } from '../config/constants.ts'
-import { isNil, isObject } from '../utils/is.ts'
+import { CURRENCY_LOCALES, FORMAT_STYLES } from '@/config/constants.js'
+import { isNil, isObject } from '@/utils/is.js'
 
-import type { FormatOptions, IFormattingService, MoneyInput } from '../types.ts'
+import type { FormatOptions, IFormattingService, MoneyInput } from '@/types.js'
 
 /** Classe responsável pela formatação de valores monetários. */
 export class FormattingService implements IFormattingService {

@@ -1,12 +1,12 @@
-import type { CURRENCY_LOCALES, ROUNDING_MODES } from './config/constants.ts'
-import type { Money } from './lib/money.ts'
+import type { CURRENCY_LOCALES, ROUNDING_MODES } from './config/constants.js'
+import type { MoneyFacade } from './lib/money.js'
 
 export type CurrencyCode = keyof typeof CURRENCY_LOCALES
 export type CurrencyLocales =
   (typeof CURRENCY_LOCALES)[keyof typeof CURRENCY_LOCALES]
 export type RoundingModes = (typeof ROUNDING_MODES)[keyof typeof ROUNDING_MODES]
 
-export type MoneyInput = number | string | Money
+export type MoneyInput = number | string | MoneyFacade
 
 export interface PricedItem {
   price: MoneyInput
@@ -30,26 +30,34 @@ export interface IFormattingService {
   format(value: MoneyInput, options?: FormatOptions): string
 }
 
-export interface ICalculationService {
-  addition(firstValue: number, secondValue: number): Money
-  subtraction(firstValue: number, secondValue: number): Money
-  multiplication(value: number, factor: number): Money
-  division(value: number, divisor: number): Money
-  percentage(value: number, percentage: number): Money
-  //
-  calculateSubtotal(item: PricedItem, quantity: number): Money
-  calculateTotal(items: PricedItem[] | null): Money
-  calculateAveragePrice(items: PricedItem[] | null): Money
-  distributeInstallments(
-    value: MoneyInput,
-    numberOfInstallments: number,
-  ): Money[]
-}
-
 export interface IRoundingService {
   round(value: number, precision: number, mode: RoundingModes): number
 }
 
+//# export interface ICalculationService {}
+interface ICalculationArithmetic {
+  addition(firstValue: number, secondValue: number): MoneyFacade
+  subtraction(firstValue: number, secondValue: number): MoneyFacade
+  multiplication(value: number, factor: number): MoneyFacade
+  division(value: number, divisor: number): MoneyFacade
+}
+
+interface ICalculationBusiness {
+  percentage(value: number, percentage: number): MoneyFacade
+  calculateSubtotal(item: PricedItem, quantity: number): MoneyFacade
+  calculateTotal(items: PricedItem[] | null): MoneyFacade
+  calculateAveragePrice(items: PricedItem[] | null): MoneyFacade
+  distributeInstallments(
+    value: MoneyInput,
+    numberOfInstallments: number,
+  ): MoneyFacade[]
+}
+
+export interface ICalculationService
+  extends ICalculationArithmetic,
+    ICalculationBusiness {}
+
+//# Interfaces para a classe MoneyFacade
 interface IMoneyProperties {
   cents: number
   value: number
@@ -65,7 +73,7 @@ interface IMoneyConversion {
   toString(): string
   valueOf(): number
   format(options: FormatOptions): string
-  clone(): Money
+  clone(): MoneyFacade
 }
 
 interface IMoneyComparison {
@@ -78,28 +86,28 @@ interface IMoneyComparison {
 }
 
 interface IMoneyTransformation {
-  absolute(): Money
-  max(value: MoneyInput): Money
-  min(value: MoneyInput): Money
-  negate(): Money
-  round(precision?: number, mode?: RoundingModes): Money
+  absolute(): MoneyFacade
+  max(value: MoneyInput): MoneyFacade
+  min(value: MoneyInput): MoneyFacade
+  negate(): MoneyFacade
+  round(precision?: number, mode?: RoundingModes): MoneyFacade
 }
 
 interface IMoneyArithmetic {
-  plus(value: MoneyInput): Money
-  minus(value: MoneyInput): Money
-  times(factor: number): Money
-  dividedBy(divisor: number): Money
+  plus(value: MoneyInput): MoneyFacade
+  minus(value: MoneyInput): MoneyFacade
+  times(factor: number): MoneyFacade
+  dividedBy(divisor: number): MoneyFacade
 }
 
 interface IMoneyBusiness {
-  allocate(numberOfParts: number): Money[]
-  applyDiscount(discount: number): Money
-  applySurcharge(surcharge: number): Money
-  percentage(percentage: number): Money
+  allocate(numberOfParts: number): MoneyFacade[]
+  applyDiscount(discount: number): MoneyFacade
+  applySurcharge(surcharge: number): MoneyFacade
+  percentage(percentage: number): MoneyFacade
 }
 
-export interface IMoney
+export interface IMoneyFacade
   extends IMoneyProperties,
     IMoneyConversion,
     IMoneyComparison,

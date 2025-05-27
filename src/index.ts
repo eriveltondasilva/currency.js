@@ -1,17 +1,17 @@
-import { ROUNDING_MODES } from './config/constants.ts'
-import { CalculationService } from './lib/calculation-service.ts'
-import { Money as MoneyBase } from './lib/money.ts'
+import { ROUNDING_MODES } from './config/constants.js'
+import { CalculationService } from './lib/calculation-service.js'
+import { MoneyFacade } from './lib/money.js'
 
-import type { FormatOptions, MoneyInput, RoundingModes } from './types.ts'
+import type { FormatOptions, MoneyInput, RoundingModes } from './types.js'
 
 /**
- * Cria uma fábrica de instâncias Money com opções de formatação padrão
+ * Cria uma fábrica de instâncias MoneyFacade com opções de formatação padrão
  * @param defaultOptions - Opções de formatação padrão
  * @returns Função fábrica configurada
  */
 function createMoneyFactory(defaultOptions: FormatOptions = {}) {
-  const factory = (value: MoneyInput = 0): MoneyBase =>
-    new MoneyBase(value, defaultOptions)
+  const factory = (value: MoneyInput = 0): MoneyFacade =>
+    new MoneyFacade(value, defaultOptions)
 
   factory.configure = (options: FormatOptions) =>
     createMoneyFactory({ ...defaultOptions, ...options })

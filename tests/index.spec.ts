@@ -1,5 +1,5 @@
 import Money, { Calculator, Currency, ROUNDING_MODES } from '@/index.js'
-import { Money as MoneyBase } from '@/lib/money.js'
+import { MoneyFacade as MoneyBase } from '@/lib/money.js'
 
 describe('Money Factory', () => {
   it('deve criar uma instância Money com valor padrão', () => {

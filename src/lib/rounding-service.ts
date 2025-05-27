@@ -1,6 +1,5 @@
-import { ROUNDING_MODES } from '../config/constants.ts'
-
-import type { IRoundingService, RoundingModes } from '../types.ts'
+import { ROUNDING_MODES } from '@/config/constants.js'
+import type { IRoundingService, RoundingModes } from '@/types.js'
 
 /** Classe responsável pelo arredondamento de valores monetários. */
 export class RoundingService implements IRoundingService {

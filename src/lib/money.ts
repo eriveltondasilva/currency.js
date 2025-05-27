@@ -1,23 +1,23 @@
-import { CENT_FACTOR, ROUNDING_MODES } from '../config/constants.ts'
-import { ConversionService } from './conversion-service.ts'
-import { FormattingService } from './formatting-service.ts'
-import { RoundingService } from './rounding-service.ts'
+import { CENT_FACTOR, ROUNDING_MODES } from '@/config/constants.js'
+import { ConversionService } from './conversion-service.js'
+import { FormattingService } from './formatting-service.js'
+import { RoundingService } from './rounding-service.js'
 
 import type {
   FormatOptions,
-  IMoney,
+  IMoneyFacade,
   MoneyInput,
   RoundingModes,
-} from '../types.ts'
+} from '@/types.js'
 
 /**
- * Classe Money - Implementa operações aritméticas, comparações e formatação
+ * Classe MoneyFacade - Implementa operações aritméticas, comparações e formatação
  * para manipulação segura de valores monetários.
  *
  * Esta classe utiliza centavos como unidade interna para evitar problemas de precisão
  * com números de ponto flutuante em operações financeiras.
  */
-export class Money implements IMoney {
+export class MoneyFacade implements IMoneyFacade {
   /** Valor em centavos */
   private readonly _cents: number = 0
   private readonly converter: ConversionService
@@ -26,20 +26,20 @@ export class Money implements IMoney {
   private readonly options: FormatOptions
 
   /**
-   * Cria uma nova instância de Money.
+   * Cria uma nova instância de MoneyFacade.
    *
-   * @param value - Valor monetário inicial (número, string ou instância Money)
+   * @param value - Valor monetário inicial (número, string ou instância MoneyFacade)
    * @param options - Opções de formatação para esta instância
    *
    * @example
-   * // Diferentes formas de criar instâncias Money
-   * const a = new Money(10.50);
-   * const b = new Money("10.50");
-   * const c = new Money("10,50");
-   * const d = new Money("$10.50");
-   * const e = new Money("R$ 10,50");
-   * const f = new Money(a);
-   * const g = new Money(1050, { currencyCode: 'BRL' });
+   * // Diferentes formas de criar instâncias MoneyFacade
+   * const a = new MoneyFacade(10.50);
+   * const b = new MoneyFacade("10.50");
+   * const c = new MoneyFacade("10,50");
+   * const d = new MoneyFacade("$10.50");
+   * const e = new MoneyFacade("R$ 10,50");
+   * const f = new MoneyFacade(a);
+   * const g = new MoneyFacade(1050, { currencyCode: 'BRL' });
    */
   constructor(value: MoneyInput = 0, options: FormatOptions = {}) {
     this.converter = ConversionService.instance
@@ -51,37 +51,40 @@ export class Money implements IMoney {
   }
 
   /**
-   * Cria uma instância de Money a partir de um valor em centavos.
+   * Cria uma instância de MoneyFacade a partir de um valor em centavos.
    *
    * @param value - Valor em centavos (inteiro)
    * @param options - Opções de formatação
-   * @returns Nova instância de Money
+   * @returns Nova instância de MoneyFacade
    *
    * @example
-   * // Criar Money a partir de 1050 centavos (equivalente a 10.50)
-   * const money = Money.fromCents(1050, { currencyCode: 'BRL' });
+   * // Criar MoneyFacade a partir de 1050 centavos (equivalente a 10.50)
+   * const money = MoneyFacade.fromCents(1050, { currencyCode: 'BRL' });
    */
-  public static fromCents(value: number, options: FormatOptions = {}): Money {
+  public static fromCents(
+    value: number,
+    options: FormatOptions = {},
+  ): MoneyFacade {
     if (!Number.isFinite(value)) {
       throw new Error('O valor em centavos deve ser um número finito')
     }
 
-    const currency = new Money(0, options)
+    const currency = new MoneyFacade(0, options)
     Object.defineProperty(currency, '_cents', { value: Math.round(value) })
     return currency
   }
 
   /**
-   * Cria uma instância de Money com valor zero.
+   * Cria uma instância de MoneyFacade com valor zero.
    *
    * @param options - Opções de formatação
-   * @returns Nova instância de Money com valor zero
+   * @returns Nova instância de MoneyFacade com valor zero
    *
    * @example
-   * const zero = Money.zero({ currencyCode: 'EUR' });
+   * const zero = MoneyFacade.zero({ currencyCode: 'EUR' });
    */
-  public static zero(options: FormatOptions = {}): Money {
-    return new Money(0, options)
+  public static zero(options: FormatOptions = {}): MoneyFacade {
+    return new MoneyFacade(0, options)
   }
 
   /**
@@ -90,7 +93,7 @@ export class Money implements IMoney {
    * @returns Valor em centavos como número inteiro
    *
    * @example
-   * const money = new Money(10.50);
+   * const money = new MoneyFacade(10.50);
    * console.log(money.cents); // 1050
    */
   public get cents(): number {
@@ -103,7 +106,7 @@ export class Money implements IMoney {
    * @returns Valor monetário (ex: 10.50)
    *
    * @example
-   * const money = new Money(10.50);
+   * const money = new MoneyFacade(10.50);
    * console.log(money.value); // 10.5
    */
   public get value(): number {
@@ -116,7 +119,7 @@ export class Money implements IMoney {
    * @returns Parte inteira do valor (ex: para 10.50 retorna 10)
    *
    * @example
-   * const money = new Money(10.50);
+   * const money = new MoneyFacade(10.50);
    * console.log(money.integer); // 10
    */
   public get integer(): number {
@@ -129,7 +132,7 @@ export class Money implements IMoney {
    * @returns Parte decimal como fração (ex: para 10.50 retorna 0.50)
    *
    * @example
-   * const money = new Money(10.50);
+   * const money = new MoneyFacade(10.50);
    * console.log(money.decimal); // 0.5
    */
   public get decimal(): number {
@@ -141,7 +144,7 @@ export class Money implements IMoney {
    * @returns formatOptions
    *
    * @example
-   * const money = new Money(10.50);
+   * const money = new MoneyFacade(10.50);
    * console.log(money.formatOptions); // { currencyCode: 'USD', locale: 'en-US' }
    */
   public get formatOptions(): FormatOptions {
@@ -154,7 +157,7 @@ export class Money implements IMoney {
    * @returns true se o valor for zero, false caso contrário
    *
    * @example
-   * const money = new Money(0);
+   * const money = new MoneyFacade(0);
    * console.log(money.isZero); // true
    */
   public get isZero(): boolean {
@@ -167,7 +170,7 @@ export class Money implements IMoney {
    * @returns true se o valor for maior que zero, false caso contrário
    *
    * @example
-   * const money = new Money(10.50);
+   * const money = new MoneyFacade(10.50);
    * console.log(money.isPositive); // true
    */
   public get isPositive(): boolean {
@@ -180,7 +183,7 @@ export class Money implements IMoney {
    * @returns true se o valor for menor que zero, false caso contrário
    *
    * @example
-   * const money = new Money(-10.50);
+   * const money = new MoneyFacade(-10.50);
    * console.log(money.isNegative); // true
    */
   public get isNegative(): boolean {
@@ -188,16 +191,16 @@ export class Money implements IMoney {
   }
 
   /**
-   * Retorna uma cópia desta instância de Money.
+   * Retorna uma cópia desta instância de MoneyFacade.
    *
-   * @returns Nova instância de Money com o mesmo valor e opções
+   * @returns Nova instância de MoneyFacade com o mesmo valor e opções
    *
    * @example
-   * const original = new Money(10.50, { currencyCode: 'BRL' });
+   * const original = new MoneyFacade(10.50, { currencyCode: 'BRL' });
    * const copy = original.clone();
    */
-  public clone(): Money {
-    return Money.fromCents(this._cents, this.options)
+  public clone(): MoneyFacade {
+    return MoneyFacade.fromCents(this._cents, this.options)
   }
 
   /**
@@ -207,7 +210,7 @@ export class Money implements IMoney {
    * @returns String formatada representando o valor monetário
    *
    * @example
-   * const price = new Money(1234.56);
+   * const price = new MoneyFacade(1234.56);
    * console.log(price.format()); // R$ 1.234,56 (com opções padrão)
    * console.log(price.format({ currencyCode: 'USD', locale: 'en-US' })); // $1,234.56
    */
@@ -222,7 +225,7 @@ export class Money implements IMoney {
    * @returns Representação do valor como string (ex: "10.50")
    *
    * @example
-   * const money = new Money(10.50);
+   * const money = new MoneyFacade(10.50);
    * console.log(money.toString()); // "10.50"
    */
   public toString(): string {
@@ -235,7 +238,7 @@ export class Money implements IMoney {
    * @returns Valor numérico
    *
    * @example
-   * const money = new Money(10.50);
+   * const money = new MoneyFacade(10.50);
    * console.log(+money); // 10.5
    */
   public valueOf(): number {
@@ -249,8 +252,8 @@ export class Money implements IMoney {
    * @returns true se os valores são iguais, false caso contrário
    *
    * @example
-   * const a = new Money(10.50);
-   * const b = new Money(10.50);
+   * const a = new MoneyFacade(10.50);
+   * const b = new MoneyFacade(10.50);
    * console.log(a.equals(b)); // true
    */
   public equals(value: MoneyInput): boolean {
@@ -265,7 +268,7 @@ export class Money implements IMoney {
    * @returns true se o valor estiver dentro do intervalo, false caso contrário
    *
    * @example
-   * const price = new Money(50);
+   * const price = new MoneyFacade(50);
    * console.log(price.isBetween(10, 100)); // true
    */
   public isBetween(min: MoneyInput, max: MoneyInput): boolean {
@@ -286,8 +289,8 @@ export class Money implements IMoney {
    * @returns true se este valor for maior, false caso contrário
    *
    * @example
-   * const a = new Money(10.50);
-   * const b = new Money(5.25);
+   * const a = new MoneyFacade(10.50);
+   * const b = new MoneyFacade(5.25);
    * console.log(a.greaterThan(b)); // true
    */
   public greaterThan(value: MoneyInput): boolean {
@@ -301,8 +304,8 @@ export class Money implements IMoney {
    * @returns true se este valor for menor, false caso contrário
    *
    * @example
-   * const a = new Money(5.25);
-   * const b = new Money(10.50);
+   * const a = new MoneyFacade(5.25);
+   * const b = new MoneyFacade(10.50);
    * console.log(a.lessThan(b)); // true
    */
   public lessThan(value: MoneyInput): boolean {
@@ -316,8 +319,8 @@ export class Money implements IMoney {
    * @returns true se este valor for maior ou igual, false caso contrário
    *
    * @example
-   * const a = new Money(10.50);
-   * const b = new Money(10.50);
+   * const a = new MoneyFacade(10.50);
+   * const b = new MoneyFacade(10.50);
    * console.log(a.greaterThanOrEqual(b)); // true
    */
   public greaterThanOrEqual(value: MoneyInput): boolean {
@@ -331,8 +334,8 @@ export class Money implements IMoney {
    * @returns true se este valor for menor ou igual, false caso contrário
    *
    * @example
-   * const a = new Money(10.50);
-   * const b = new Money(10.50);
+   * const a = new MoneyFacade(10.50);
+   * const b = new MoneyFacade(10.50);
    * console.log(a.lessThanOrEqual(b)); // true
    */
   public lessThanOrEqual(value: MoneyInput): boolean {
@@ -342,70 +345,70 @@ export class Money implements IMoney {
   /**
    * Retorna o valor absoluto deste valor monetário.
    *
-   * @returns Nova instância de Money com o valor absoluto
+   * @returns Nova instância de MoneyFacade com o valor absoluto
    *
    * @example
-   * const negative = new Money(-10.50);
+   * const negative = new MoneyFacade(-10.50);
    * const absolute = negative.absolute();
    * console.log(absolute.value); // 10.5
    */
-  public absolute(): Money {
+  public absolute(): MoneyFacade {
     if (this.isPositive || this.isZero) return this.clone()
-    return Money.fromCents(Math.abs(this._cents), this.options)
+    return MoneyFacade.fromCents(Math.abs(this._cents), this.options)
   }
 
   /**
    * Retorna o maior valor entre este e outro valor monetário.
    *
    * @param value - Valor a ser comparado
-   * @returns Nova instância de Money com o maior valor
+   * @returns Nova instância de MoneyFacade com o maior valor
    *
    * @example
-   * const a = new Money(10.50);
-   * const b = new Money(5.25);
+   * const a = new MoneyFacade(10.50);
+   * const b = new MoneyFacade(5.25);
    * const max = a.max(b);
    * console.log(max.value); // 10.5
    */
-  public max(value: MoneyInput): Money {
+  public max(value: MoneyInput): MoneyFacade {
     const otherCents = this.converter.toCents(value)
     return this._cents >= otherCents ?
         this.clone()
-      : Money.fromCents(otherCents, this.options)
+      : MoneyFacade.fromCents(otherCents, this.options)
   }
 
   /**
    * Retorna o menor valor entre este e outro valor monetário.
    *
    * @param value - Valor a ser comparado
-   * @returns Nova instância de Money com o menor valor
+   * @returns Nova instância de MoneyFacade com o menor valor
    *
    * @example
-   * const a = new Money(10.50);
-   * const b = new Money(5.25);
+   * const a = new MoneyFacade(10.50);
+   * const b = new MoneyFacade(5.25);
    * const min = a.min(b);
    * console.log(min.value); // 5.25
    */
-  public min(value: MoneyInput): Money {
+  public min(value: MoneyInput): MoneyFacade {
     const otherCents = this.converter.toCents(value)
     return this._cents <= otherCents ?
         this.clone()
-      : Money.fromCents(otherCents, this.options)
+      : MoneyFacade.fromCents(otherCents, this.options)
   }
 
   /**
    * Inverte o sinal do valor monetário.
    *
-   * @returns Nova instância de Money com o sinal invertido
+   * @returns Nova instância de MoneyFacade com o sinal invertido
    *
    * @example
-   * const positive = new Money(10.50);
+   * const positive = new MoneyFacade(10.50);
    * const negative = positive.negate();
    * console.log(negative.value); // -10.5
    */
-  public negate(): Money {
+  public negate(): MoneyFacade {
     return this.isZero ?
         this.clone()
-      : Money.fromCents(-this._cents, this.options)
+      : MoneyFacade.fromCents(-this._cents, this.options)
   }
 
   /**
@@ -413,17 +416,17 @@ export class Money implements IMoney {
    *
    * @param precision - Precisão do arredondamento (padrão: 1)
    * @param mode - Modo de arredondamento (padrão: 'round')
-   * @returns Nova instância de Money com o valor arredondado
+   * @returns Nova instância de MoneyFacade com o valor arredondado
    *
    * @example
-   * const price = new Money(10.56);
+   * const price = new MoneyFacade(10.56);
    * const rounded = price.round(10);
    * console.log(rounded.value); // 10.6
    */
   public round(
     precision: number = 1,
     mode: RoundingModes = ROUNDING_MODES.ROUND,
-  ): Money {
+  ): MoneyFacade {
     if (precision <= 0) {
       throw new Error('A precisão deve ser um número positivo')
     }
@@ -434,88 +437,88 @@ export class Money implements IMoney {
 
     return roundedCents === this._cents ?
         this.clone()
-      : Money.fromCents(roundedCents, this.options)
+      : MoneyFacade.fromCents(roundedCents, this.options)
   }
 
   /**
    * Adiciona outro valor monetário a este.
    *
    * @param value - Valor a ser adicionado
-   * @returns Nova instância de Money com o resultado da adição
+   * @returns Nova instância de MoneyFacade com o resultado da adição
    *
    * @example
-   * const a = new Money(10.50);
+   * const a = new MoneyFacade(10.50);
    * const sum = a.plus(5.25);
    * console.log(sum.value); // 15.75
    */
-  public plus(value: MoneyInput): Money {
+  public plus(value: MoneyInput): MoneyFacade {
     const valueCents = this.converter.toCents(value)
     return valueCents === 0 ?
         this.clone()
-      : Money.fromCents(this.cents + valueCents, this.options)
+      : MoneyFacade.fromCents(this.cents + valueCents, this.options)
   }
 
   /**
    * Subtrai outro valor monetário deste.
    *
    * @param value - Valor a ser subtraído
-   * @returns Nova instância de Money com o resultado da subtração
+   * @returns Nova instância de MoneyFacade com o resultado da subtração
    *
    * @example
-   * const a = new Money(10.50);
+   * const a = new MoneyFacade(10.50);
    * const diff = a.minus(5.25);
    * console.log(diff.value); // 5.25
    */
-  public minus(value: MoneyInput): Money {
+  public minus(value: MoneyInput): MoneyFacade {
     const valueCents = this.converter.toCents(value)
     return valueCents === 0 ?
         this.clone()
-      : Money.fromCents(this.cents - valueCents, this.options)
+      : MoneyFacade.fromCents(this.cents - valueCents, this.options)
   }
 
   /**
    * Multiplica o valor monetário por um fator.
    *
    * @param factor - Fator de multiplicação (deve ser positivo)
-   * @returns Nova instância de Money com o resultado da multiplicação
+   * @returns Nova instância de MoneyFacade com o resultado da multiplicação
    * @throws Error se o fator for zero ou negativo
    *
    * @example
-   * const price = new Money(10.50);
+   * const price = new MoneyFacade(10.50);
    * const doubled = price.times(2);
    * console.log(doubled.value); // 21.0
    */
-  public times(factor: number): Money {
+  public times(factor: number): MoneyFacade {
     if (factor < 0) {
       throw new Error('O fator de multiplicação não pode ser negativo.')
     }
 
-    if (factor === 0) return Money.zero(this.options)
+    if (factor === 0) return MoneyFacade.zero(this.options)
     if (factor === 1) return this.clone()
 
-    return Money.fromCents(this._cents * factor, this.options)
+    return MoneyFacade.fromCents(this._cents * factor, this.options)
   }
 
   /**
    * Divide o valor monetário por um divisor.
    *
    * @param divisor - Valor pelo qual dividir (deve ser positivo)
-   * @returns Nova instância de Money com o resultado da divisão
+   * @returns Nova instância de MoneyFacade com o resultado da divisão
    * @throws Error se o divisor for zero ou negativo
    *
    * @example
-   * const price = new Money(10.50);
+   * const price = new MoneyFacade(10.50);
    * const half = price.dividedBy(2);
    * console.log(half.value); // 5.25
    */
-  public dividedBy(divisor: number): Money {
+  public dividedBy(divisor: number): MoneyFacade {
     if (divisor <= 0) {
       throw new Error('Não é possível dividir por zero ou negativo.')
     }
 
     if (divisor === 1) return this.clone()
 
-    return Money.fromCents(this._cents / divisor, this.options)
+    return MoneyFacade.fromCents(this._cents / divisor, this.options)
   }
 
   /**
@@ -524,22 +527,22 @@ export class Money implements IMoney {
    * distribuindo os centavos restantes entre as primeiras partes.
    *
    * @param numberOfParts - Número de partes (deve ser positivo)
-   * @returns Array de instâncias Money representando as partes
+   * @returns Array de instâncias MoneyFacade representando as partes
    * @throws Error se o número de partes não for um inteiro positivo
    *
    * @example
    * // Distribuir R$ 10,00 em 3 partes
-   * const money = new Money(10);
+   * const money = new MoneyFacade(10);
    * const parts = money.allocate(3);
    * // Resultado: [R$ 3,34, R$ 3,33, R$ 3,33]
    */
-  public allocate(numberOfParts: number): Money[] {
+  public allocate(numberOfParts: number): MoneyFacade[] {
     if (!Number.isInteger(numberOfParts) || numberOfParts <= 0) {
       throw new Error('O número de parcelas deve ser um inteiro positivo.')
     }
 
     if (this.isZero) {
-      return Array(numberOfParts).fill(Money.zero(this.options))
+      return Array(numberOfParts).fill(MoneyFacade.zero(this.options))
     }
 
     const base = Math.floor(this._cents / numberOfParts)
@@ -547,7 +550,7 @@ export class Money implements IMoney {
 
     return Array.from({ length: numberOfParts }, (_, i) => {
       const amount = base + (i < remainder ? 1 : 0)
-      return Money.fromCents(amount, this.options)
+      return MoneyFacade.fromCents(amount, this.options)
     })
   }
 
@@ -555,15 +558,15 @@ export class Money implements IMoney {
    * Aplica um desconto percentual ao valor atual.
    *
    * @param discount - Percentual de desconto (deve ser positivo)
-   * @returns Nova instância de Money com o desconto aplicado
+   * @returns Nova instância de MoneyFacade com o desconto aplicado
    * @throws Error se o percentual de desconto for zero ou negativo
    *
    * @example
-   * const price = new Money(100);
+   * const price = new MoneyFacade(100);
    * const discounted = price.applyDiscount(20);
    * console.log(discounted.value); // 80
    */
-  public applyDiscount(discount: number): Money {
+  public applyDiscount(discount: number): MoneyFacade {
     if (discount <= 0) {
       throw new Error('O percentual de desconto não pode ser zero ou negativo.')
     }
@@ -579,15 +582,15 @@ export class Money implements IMoney {
    * Aplica um acréscimo percentual ao valor atual.
    *
    * @param surcharge - Percentual de acréscimo (deve ser positivo)
-   * @returns Nova instância de Money com o acréscimo aplicado
+   * @returns Nova instância de MoneyFacade com o acréscimo aplicado
    * @throws Error se o percentual de acréscimo for zero ou negativo
    *
    * @example
-   * const price = new Money(100);
+   * const price = new MoneyFacade(100);
    * const increased = price.applySurcharge(20);
    * console.log(increased.value); // 120
    */
-  public applySurcharge(surcharge: number): Money {
+  public applySurcharge(surcharge: number): MoneyFacade {
     if (surcharge <= 0) {
       throw new Error(
         'O percentual de acréscimo não pode ser zero ou negativo.',
@@ -601,15 +604,15 @@ export class Money implements IMoney {
    * Calcula uma porcentagem deste valor monetário.
    *
    * @param percentage - Valor percentual a ser calculado (deve ser positivo)
-   * @returns Nova instância de Money representando a porcentagem do valor
+   * @returns Nova instância de MoneyFacade representando a porcentagem do valor
    * @throws Error se a porcentagem for zero ou negativa
    *
    * @example
-   * const price = new Money(100);
+   * const price = new MoneyFacade(100);
    * const tenPercent = price.percentage(10);
    * console.log(tenPercent.value); // 10
    */
-  public percentage(percentage: number): Money {
+  public percentage(percentage: number): MoneyFacade {
     if (percentage <= 0) {
       throw new Error('A porcentagem não pode ser zero ou negativo.')
     }

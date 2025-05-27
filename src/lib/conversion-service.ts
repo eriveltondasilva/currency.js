@@ -1,7 +1,7 @@
-import { CENT_FACTOR } from '../config/constants.ts'
-import { isNil, isObject, isString } from '../utils/is.ts'
+import { CENT_FACTOR } from '@/config/constants.js'
+import { isNil, isObject, isString } from '@/utils/is.js'
 
-import type { IConversionService, MoneyInput } from '../types.ts'
+import type { IConversionService, MoneyInput } from '@/types.js'
 
 /** Classe responsável pela conversão de diferentes tipos de entrada para centavos. */
 export class ConversionService implements IConversionService {

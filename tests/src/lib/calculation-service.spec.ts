@@ -1,5 +1,5 @@
 import { CalculationService } from '@/lib/calculation-service.js'
-import { Money } from '@/lib/money.js'
+import { MoneyFacade } from '@/lib/money.js'
 
 describe('CalculationService', () => {
   let calculator: CalculationService
@@ -156,7 +156,7 @@ describe('CalculationService', () => {
         .setConfigure({ currencyCode: 'EUR' })
         .addition('10.50', 5.75)
 
-      expect(result).toBeInstanceOf(Money)
+      expect(result).toBeInstanceOf(MoneyFacade)
       expect(result.value).toBe(16.25)
     })
   })
