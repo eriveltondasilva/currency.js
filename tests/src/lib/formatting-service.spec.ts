@@ -1,6 +1,5 @@
-import { describe, expect, it } from 'vitest'
-import { MoneyInput } from '../types'
-import { FormattingService } from './formatting-service'
+import { FormattingService } from '@/lib/formatting-service.js'
+import type { MoneyInput } from '@/types.js'
 
 describe('FormattingService', () => {
   describe('Padrão Singleton', () => {

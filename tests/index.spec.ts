@@ -1,6 +1,5 @@
-import { describe, expect, it } from 'vitest'
-import Money, { Calculator, Currency, ROUNDING_MODES } from './index'
-import { Money as MoneyBase } from './lib/money'
+import Money, { Calculator, Currency, ROUNDING_MODES } from '@/index.js'
+import { Money as MoneyBase } from '@/lib/money.js'
 
 describe('Money Factory', () => {
   it('deve criar uma instância Money com valor padrão', () => {

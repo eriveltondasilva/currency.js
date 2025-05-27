@@ -1,5 +1,4 @@
-import { describe, expect, it } from 'vitest'
-import { isArray, isEmpty, isNil, isObject } from './is'
+import { isArray, isEmpty, isNil, isObject } from '@/utils/is.js'
 
 describe('isObject', () => {
   it('deve retornar true para objetos', () => {

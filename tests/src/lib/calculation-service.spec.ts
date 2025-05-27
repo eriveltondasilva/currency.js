@@ -1,6 +1,5 @@
-import { beforeEach, describe, expect, it } from 'vitest'
-import { CalculationService } from './calculation-service'
-import { Money } from './money'
+import { CalculationService } from '@/lib/calculation-service.js'
+import { Money } from '@/lib/money.js'
 
 describe('CalculationService', () => {
   let calculator: CalculationService
@@ -125,9 +124,9 @@ describe('CalculationService', () => {
       const installments = calculator.distributeInstallments('100.00', 3)
 
       expect(installments.length).toBe(3)
-      expect(installments[0].value).toBe(33.34)
-      expect(installments[1].value).toBe(33.33)
-      expect(installments[2].value).toBe(33.33)
+      expect(installments[0]?.value).toBe(33.34)
+      expect(installments[1]?.value).toBe(33.33)
+      expect(installments[2]?.value).toBe(33.33)
 
       // Verifica se a soma das parcelas é igual ao valor original
       const total = installments.reduce((sum, inst) => sum + inst.value, 0)

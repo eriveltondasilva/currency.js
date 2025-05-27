@@ -1,5 +1,4 @@
-import { describe, expect, it } from 'vitest'
-import { ConversionService } from './conversion-service'
+import { ConversionService } from '@/lib/conversion-service.js'
 
 describe('ConversionService', () => {
   const conversionService = ConversionService.instance

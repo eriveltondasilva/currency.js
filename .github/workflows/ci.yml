@@ -27,10 +27,7 @@ jobs:
         run: npm ci
 
       - name: verifica o código
-        run: |
-          npm run check:types
-          npm run lint
-          npm run test
+        run: npm run code:check
 
       - name: executa o build
         run: npm run build

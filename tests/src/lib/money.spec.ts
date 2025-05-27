@@ -1,6 +1,5 @@
-import { describe, expect, it } from 'vitest'
-import { ROUNDING_MODES } from '../config/constants'
-import { Money } from '../lib/money'
+import { ROUNDING_MODES } from '@/config/constants.js'
+import { Money } from '@/lib/money.js'
 
 describe('Money', () => {
   // Testes de criação de instâncias
@@ -167,9 +166,9 @@ describe('Money', () => {
       const parts = money.allocate(3)
 
       expect(parts.length).toBe(3)
-      expect(parts[0].value).toBe(3.34)
-      expect(parts[1].value).toBe(3.33)
-      expect(parts[2].value).toBe(3.33)
+      expect(parts[0]?.value).toBe(3.34)
+      expect(parts[1]?.value).toBe(3.33)
+      expect(parts[2]?.value).toBe(3.33)
 
       // A soma deve ser igual ao valor original
       const sum = parts.reduce((acc, part) => acc.plus(part), Money.zero())

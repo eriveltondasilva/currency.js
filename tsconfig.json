@@ -6,12 +6,11 @@
   ],
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDirs": ["src", "tests"],
     "removeComments": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "types": ["vitest/globals"],
-    //
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]

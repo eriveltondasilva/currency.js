@@ -1,6 +1,5 @@
-import { describe, expect, it } from 'vitest'
-import { ROUNDING_MODES } from '../config/constants'
-import { RoundingService } from './rounding-service'
+import { ROUNDING_MODES } from '@/config/constants.js'
+import { RoundingService } from '@/lib/rounding-service.js'
 
 // TODO: Adicionar testes unitários para a classe RoundingService
 describe('RoundingService', () => {
