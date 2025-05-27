@@ -1,8 +1,7 @@
 import { defineConfig } from 'tsup'
 import packageJson from './package.json'
 
-const banner =
-`/**
+const banner = `/**
  * ${packageJson.name} v${packageJson.version}
  * ${packageJson.description}
  *
@@ -13,10 +12,14 @@ const banner =
  */
 `
 
+const commonConfig = {
+  entry: ['./src/index.ts'],
+  treeshake: true,
+}
+
 export default defineConfig([
   {
-    entry: ['./src/index.ts'],
-    treeshake: true,
+    ...commonConfig,
     format: 'esm',
     clean: true,
     dts: {
@@ -25,8 +28,8 @@ export default defineConfig([
     },
   },
   {
-    entry: ['./src/index.ts'],
-    treeshake: true,
+    ...commonConfig,
+    sourcemap: true,
     format: ['esm', 'cjs'],
     outExtension: ({ format }) => ({
       js: format === 'esm' ? '.mjs' : '.cjs',

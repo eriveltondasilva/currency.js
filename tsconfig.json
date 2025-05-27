@@ -4,29 +4,28 @@
     "@tsconfig/node20/tsconfig.json",
     "@tsconfig/node-ts/tsconfig.json"
   ],
-  "ts-node": {
-    "esm": true,
-    "transpileOnly": true,
-    "files": true
-  },
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
     "removeComments": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "types": ["vitest/globals"],
     //
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "tests"],
   "exclude": [
     "node_modules",
+    ".github",
+    ".husky",
+    "assets",
+    "coverage",
     "dist",
     "docs",
-    "__tests__",
-    "**/*.example.ts",
-    "**/*.spec.ts",
-    "**/*.test.ts"
+    "**/*.example.ts"
   ]
 }
