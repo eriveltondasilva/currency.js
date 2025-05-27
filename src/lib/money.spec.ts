@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'vitest'
-import { Money } from '../lib/money'
+import { describe, expect, it } from 'vitest'
 import { ROUNDING_MODES } from '../config/constants'
+import { Money } from '../lib/money'
 
 describe('Money', () => {
   // Testes de criação de instâncias

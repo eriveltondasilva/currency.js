@@ -48,7 +48,6 @@
     "CHANGELOG.md"
   ],
   "contributors": [],
-  "prettier": "@eriveltonsilva/prettier-config",
   "publishConfig": {
     "access": "public"
   },
@@ -87,6 +86,7 @@
     "globals": "^16.1.0",
     "husky": "^9.1.7",
     "prettier": "^3.5.3",
+    "prettier-plugin-organize-imports": "^4.1.0",
     "tsup": "^8.5.0",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3",

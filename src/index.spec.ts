@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest'
-import Money, { Currency, Calculator, ROUNDING_MODES } from './index'
+import { describe, expect, it } from 'vitest'
+import Money, { Calculator, Currency, ROUNDING_MODES } from './index'
 import { Money as MoneyBase } from './lib/money'
 
 describe('Money Factory', () => {
